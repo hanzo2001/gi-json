@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Nodes</title>
+		<style type="text/css"></style>
+		<link rel="stylesheet" type="text/css" href="./style.css" />
+		<script src="./scripts/lib/require.js" data-main="scripts/config"></script>
+		<!--
+		<script>$(function(){var done;});</script>
+		-->
+	</head>
+	<body>
+		<div id="treeBase"></div>
+		<!--
+		<div id="root">
+			<value data-t="o">
+				<member><name>null</name><value data-t="u">&nbsp;</value></member>
+				<member><name>bool</name><value data-t="b">true|false</value></member>
+				<member><name>number</name><value data-t="n">12.00</value></member>
+				<member><name>string</name><value data-t="s">some string</value></member>
+				<member><name>array</name><value data-t="a">
+						<item><value data-t="s">more string</value></item>
+						<item><value data-t="n">12.00</value></item>
+						<item><value data-t="o">
+								<member><name>nullValue</name><value data-t="u">&nbsp;</value></member>
+								<member><name>anotherString</name><value data-t="s">settype works</value></member>
+								<member><name>anotherNumber</name><value data-t="n">12.00</value></member>
+						</value></item>
+				</value></member>
+				<member><name>object</name><value data-t="o">
+						<member><name>nullValue</name><value data-t="u">&nbsp;</value></member>
+						<member><name>anotherString</name><value data-t="s">more string</value></member>
+						<member><name>anotherNumber</name><value data-t="n">12.00</value></member>
+				</value></member>
+			</value>
+		</div>
+		-->
+		<div id="formBase"></div>
+		<div>
+			<button id="outputJSON">Output JSON</button>
+			<pre id="jsonOutput"></pre>
+		</div>
+		<!-- **************** -->
+		<!-- START HANDLEBARS -->
+		<!-- **************** -->
+		<script type="text/x-handlebars-template" id="addItemForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Add Item</h3>
+				<select name="itemType">{{{selectOptions types selectedType dflt}}}</select>
+				<input  name="itemAmount" value="1" placeholder="How many?" />
+				<input  name="itemOffset" value="{{lastIndex}}" placeholder="Before element" />
+				<button data-action="createItem" title="(Enter)" data-kbs="13">Create</button>
+				<button data-action="closeForm"  title="(Esc)"   data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="editItemContainerForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Remove Items</h3>
+				<ol start="0">{{#each items as |type|}}<li>
+					<button data-action="removeItem">{{type}}</button>
+				</li>{{/each}}</ol>
+				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="addMemberForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Add Member</h3>
+				<input  name="memberName" placeholder="Member Name" />
+				<select name="memberType">{{{selectOptions types selectedType dflt}}}</select>
+				<button data-action="createMember" title="(Enter)" data-kbs="13">Create</button>
+				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="editMemberContainerForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Remove Members</h3>
+				<ul>
+				{{#each members as |m|}}
+					<li><button data-action="removeMember" data-member-name="{{m}}">{{m}}</button></li>
+				{{/each}}
+				</ul>
+				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="editMemberForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Edit Member</h3>
+				<input  name="memberName" placeholder="Member Name" value="{{name}}" />
+				<select name="memberType">{{{selectOptions types selectedType dflt}}}</select>
+				<button data-action="updateMember" title="(Enter)" data-kbs="13">Update</button>
+				<button data-action="deleteMember">Remove</button>
+				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="editableValueForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Edit Value</h3>
+				<input name="value" placeholder="Member Name" value="{{value}}" />
+				<button data-action="updateValue" title="(Enter)" data-kbs="13">Update</button>
+				<button data-action="closeForm"   title="(Esc)"   data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="switchTypeForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Edit Type</h3>
+				<select name="valueType">{{{selectOptions types selectedType dflt}}}</select>
+				<button data-action="updateValue" title="(Enter)" data-kbs="13">Update</button>
+				<button data-action="closeForm"   title="(Esc)"   data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="startTreeForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Start Tree</h3>
+				<select name="rootType">{{{selectOptions types selectedType dflt}}}</select>
+				<button data-action="createRoot" title="(Enter)" data-kbs="13">Create</button>
+				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+	</body>
+</html>

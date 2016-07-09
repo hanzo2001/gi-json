@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"charset": "utf8",
+		"target": "es5",
+		"module" : "amd",
+		"removeComments": true,
+		/*"outFile": "./scripts/app3.js",*/
+		"outDir": "./www/scripts/",
+		"sourceMap": false,
+		"watch": true
+	},
+	"files": [
+		"./sources/config.ts",
+		"./sources/handlebars-helpers.ts",
+		"./sources/NodeEngineUtils.ts",
+		"./sources/NodeEngine.ts",
+		"./sources/app.ts"
+	]
+}

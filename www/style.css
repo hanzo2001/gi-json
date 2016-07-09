@@ -1,0 +1,80 @@
+#treeBase * {
+	font:normal 12pt arial;
+}
+member, item {
+	display:block;
+	padding-right:0.8em;
+	margin:4pt;
+}
+member {
+	background:#baf;
+	border-left:1px solid #35a;
+	border-radius:2pt;
+	box-shadow:-1pt 1pt 1pt #35a;
+}
+item {
+	background: #db7;
+	box-shadow:-1pt 1pt 1pt #a94;
+}
+item > value {
+	box-shadow:-2pt 1pt 2pt #f66;
+	/*border-color:#f66;*/
+}
+value:first-child {
+	border-left-width:1px;
+	border-left-style:solid;
+	border-radius:2pt;
+}
+name, value {
+	display:inline-block;
+	vertical-align:top;
+	line-height:14pt;
+	margin:0;
+}
+name {
+	background:#68d;
+	color:#fff;
+	font-weight:bold;
+	border-width:1px 0;
+	border-style:solid;
+	border-color:#35a;
+	padding:1pt 5pt 1pt 7pt;
+}
+value {
+	background:#fff;
+	border-width:1px 1px 1px 0;
+	border-style:solid;
+	border-color:#35a;
+	border-radius:0 2pt 2pt 0;
+	padding:1pt 7pt 1pt 5pt;
+}
+value[data-t=o], value[data-t=a] {
+	display:inline-block;
+	/*padding:2pt;*/
+}
+value[data-t=u] {
+	background:#444;
+	border-color:#444;
+}
+value[data-t=o] {
+	background:#ddf;
+}
+value[data-t=a] {
+	background:#fd9;
+	border-color:#a85;
+}
+value[data-t=b] {
+	font:normal 10pt monospace;
+	background:#cec;
+	color:#282;
+	line-height:14pt;
+	border-color:#282;
+}
+value[data-t=n] {
+	color:#b4a;
+	border-color:#b4a;
+}
+value[data-t=s] {
+	color:#c00;
+	border-color:#c00;
+}
