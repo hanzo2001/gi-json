@@ -1,14 +1,21 @@
 {
-  "name": "nodes",
-  "version": "1.0.0",
-  "description": "open source",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "learning"
-  ],
-  "author": "Santiago Acosta",
-  "license": "ISC"
+	"name": "gi-json",
+	"version": "1.0.0",
+	"description": "Graphically Interfaced JSON. Look and manipulate your JSON through a GUI.",
+	"main": "www/scripts/app.js",
+	"scripts": {},
+	"keywords": [
+		"learning", "small-project", "typescript"
+	],
+	"author": "Santiago Acosta",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hanzo2001/gi-json.git"
+	},
+	"dependencies": {
+		"requirejs": "^2.2.0",
+		"jquery": "^3.0.0",
+		"handlebars": "^4.0.5"
+	}
 }
