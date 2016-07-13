@@ -11,9 +11,9 @@
 		-->
 	</head>
 	<body>
-		<div id="treeBase"></div>
-		<!--
-		<div id="root">
+		<div id="treeBase2"></div>
+		<!-- -->
+		<div id="treeBase">
 			<value data-t="o">
 				<member><name>null</name><value data-t="u">&nbsp;</value></member>
 				<member><name>bool</name><value data-t="b">true|false</value></member>
@@ -35,7 +35,7 @@
 				</value></member>
 			</value>
 		</div>
-		-->
+		<!-- -->
 		<div id="formBase"></div>
 		<div>
 			<button id="outputJSON">Output JSON</button>
@@ -115,6 +115,23 @@
 				<select name="rootType">{{{selectOptions types selectedType dflt}}}</select>
 				<button data-action="createRoot" title="(Enter)" data-kbs="13">Create</button>
 				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="navigationForm">
+			<div data-apply-behavior="">
+				<h3>Navigate</h3>
+				<table>
+					<tr>
+						<td><button data-action="triggerClick" title="(Enter)" data-kbs="13">&curren;</button></td>
+						<td><button data-action="goPrev"   title="(Up)"    data-kbs="87">&uarr;</button></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><button data-action="goParent" title="(Left)"  data-kbs="65">&larr;</button></td>
+						<td><button data-action="goNext"   title="(Down)"  data-kbs="83">&darr;</button></td>
+						<td><button data-action="goFirst"  title="(Right)" data-kbs="68">&rarr;</button></td>
+					</tr>
+				</table>
 			</div>
 		</script>
 	</body>

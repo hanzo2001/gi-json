@@ -1,4 +1,4 @@
-///<reference path="./typings/NodeEngineUtils.d.ts" />
+///<reference path="./typings/iNodeEngineUtils.d.ts" />
 
 export var isFloatRE = /^(\+|-)?\d*[\.eE](\+|-)?\d+$/;
 export var isIntRE   = /^(\+|-)?\d+$/;
@@ -16,7 +16,7 @@ export class ElementParser {
 	}
 }
 
-export function clearTextNodes(e: Node) {
+export function clearTextNodes(e: Node): Node {
 	let c: Node = e.firstChild;
 	let n: Node;
 	while (c) {
@@ -24,6 +24,7 @@ export function clearTextNodes(e: Node) {
 		if (!(c instanceof HTMLElement)) {e.removeChild(c);}
 		c = n;
 	}
+	return e;
 }
 
 export function nullO(debug?: boolean) {

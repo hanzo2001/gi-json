@@ -1,25 +1,56 @@
-///<reference path="./typings/TreeState.d.ts" />
+///<reference path="./typings/index.d.ts" />
+///<reference path="../typings/index.d.ts" />
 
-export class TreeState implements TreeState {
-	engine: (hash: NodeHash, input: HTMLElement|ValueType) => Value;
-	hash: NodeHash;
-	formBase: HTMLElement;
+import {NavigationForm} from "./Forms/Actions/NavigationForm";
+
+export class TreeState implements iTreeState {
+	hash: iNodeHash;
+	engine: (h: iNodeHash, input: HTMLElement|ValueType) => iValue;
+	rootValue: iValue;
 	treeBase: HTMLElement;
-	rootElement: HTMLElement;
-	rootValue: Value;
-	controlForm: TreeForm;
-	clickEventsAllowed: boolean;
-	constructor(h: NodeHash, engine) {
-		this.hash = h;
-		this.engine = engine;
+	treeRoot: HTMLElement;
+	formBase: HTMLElement;
+	formControl: iGenericFormAction;
+	formFactory: iGenericTreeFormFactory;
+	form: iGenericTreeForm;
+	selectedNode: iProtoBase;
+	kbsRegister: iKeyboardShortcutRegistry;
+	navigating: boolean;
+	factory(input: HTMLElement|ValueType): iValue {
+		let v = this.engine(this.hash,input);
+		if (!this.rootValue) {
+			this.rootValue = v;
+			this.treeRoot = v.e;
+			this.treeBase.appendChild(v.e);
+			this.select(v);
+		}
+		return v;
 	}
-	factory(input: HTMLElement|ValueType): Value {
-		return this.engine(this.hash,input);
+	select(node: iProtoBase) {
+		if (node === this.selectedNode) {return;}
+		if (this.selectedNode) {
+			this.selectedNode.e.removeAttribute('class');
+		}
+		this.selectedNode = node;
+		this.selectedNode.e.setAttribute('class','selectedNode');
 	}
-	blockClicks() {
-		this.clickEventsAllowed = false;
+	deselect() {
+		if (this.selectedNode) {
+			this.selectedNode.e.removeAttribute('class');
+			this.selectedNode = null;
+		}
 	}
-	allowClicks() {
-		this.clickEventsAllowed = true;
+	navigate() {
+		console.log('state.navigate');
+		this.form = this.formFactory.create('navigationForm');
+		this.formControl = new NavigationForm(this);
+		this.navigating = true;
 	}
-}
+	manipulate() {
+		console.log('state.manipulate');
+		this.formControl && this.formControl.closeForm();
+		this.formControl = null;
+		this.form = null;
+		this.navigating = false;
+	}
+} 

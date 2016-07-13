@@ -36,6 +36,7 @@ define(["require", "exports"], function (require, exports) {
             }
             c = n;
         }
+        return e;
     }
     exports.clearTextNodes = clearTextNodes;
     function nullO(debug) {

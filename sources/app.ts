@@ -1,24 +1,44 @@
 ///<reference path="../typings/index.d.ts" />
+///<reference path="./typings/index.d.ts" />
 
 import * as $ from "jquery";
+
+import {clearTextNodes} from "./NodeEngineUtils";
 import {NodeHash} from "./NodeHash";
 import {NodeEngine} from "./NodeEngine";
 import {TreeState} from "./TreeState";
-import {StartTreeForm,AddItemForm,AddMemberForm,EditItemContainerForm,EditMemberContainerForm,EditMemberForm,EditableValueForm,SwitchTypeForm} from "./TreeForms";
+import {KeyboardShortcutRegistry} from "./Forms/KeyboardShortcutRegistry";
+import {StartTreeForm} from "./Forms/Actions/StartTreeForm";
+import {AddItemForm} from "./Forms/Actions/AddItemForm";
+import {AddMemberForm} from "./Forms/Actions/AddMemberForm";
+import {EditItemContainerForm} from "./Forms/Actions/EditItemContainerForm";
+import {EditMemberContainerForm} from "./Forms/Actions/EditMemberContainerForm";
+import {EditMemberForm} from "./Forms/Actions/EditMemberForm";
+import {EditableValueForm} from "./Forms/Actions/EditableValueForm";
+import {SwitchTypeForm} from "./Forms/Actions/SwitchTypeForm";
+import {NavigationForm} from "./Forms/Actions/NavigationForm";
+import {GenericTreeForm} from "./Forms/GenericTreeForm";
+import {GenericTreeFormFactory} from "./Forms/GenericTreeFormFactory";
+
 import "helpers";
+
+var state = new TreeState();
 
 $(function(){
 	try {
-		let engine = NodeEngine;
-		let hash = new NodeHash();
-		let state = new TreeState(hash,engine);
+		state.hash = new NodeHash();
+		state.engine = NodeEngine;
 		state.treeBase = document.getElementById('treeBase');
 		state.formBase = document.getElementById('formBase');
-		state.rootElement = <HTMLElement>state.treeBase.childNodes.item(1);
-		if (state.rootElement) {
-			state.rootValue = state.factory(state.rootElement);
+		state.formFactory = new GenericTreeFormFactory(state.formBase);
+		state.kbsRegister = new KeyboardShortcutRegistry(document);
+		let rootElement = clearTextNodes(state.treeBase).childNodes.item(0);
+		if (rootElement) {
+			state.factory(<HTMLElement>rootElement);
+			state.navigate();
 		} else {
-			(new StartTreeForm(state)).build();
+			state.form = state.formFactory.create('startTreeForm');
+			state.formControl = new StartTreeForm(state);
 		}
 		$(state.treeBase)
 			.on('click','member',state,clickMember)
@@ -36,53 +56,74 @@ $(function(){
 });
 
 function clickMember(event: JQueryEventObject) {
+	console.log('app.clickMember');
 	event.stopPropagation();
 	let memberElement: HTMLElement = this;
-	let state = <TreeState>event.data;
-	let controlForm = state.controlForm;
-	if (controlForm) {controlForm.closeForm();}
-	controlForm = new EditMemberContainerForm(state);
-	controlForm.build(<Member>state.hash.getNode(memberElement));
-	state.controlForm = controlForm;
+	let state = <iTreeState>event.data;
+	try{
+	state.manipulate();
+	state.form = state.formFactory.create('editMemberContainerForm');
+	let member = <iMember>state.hash.getNode(memberElement);
+	state.select(member);
+	state.formControl = new EditMemberContainerForm(state);
+	}catch(e){console.log(e);}
 }
 function clickItem(event: JQueryEventObject) {
+	console.log('app.clickItem');
 	event.stopPropagation();
 	let itemElement: HTMLElement = this;
-	let state = <TreeState>event.data;
-	let controlForm = state.controlForm;
-	if (controlForm) {controlForm.closeForm();}
-	controlForm = new EditItemContainerForm(state);
-	controlForm.build(<Item>state.hash.getNode(itemElement));
-	state.controlForm = controlForm;
+	let state = <iTreeState>event.data;
+	state.manipulate();
+	state.form = state.formFactory.create('editItemContainerForm');
+	let item = <iItem>state.hash.getNode(itemElement);
+	state.select(item);
+	state.formControl = new EditItemContainerForm(state);
 }
 function clickName(event: JQueryEventObject) {
+	console.log('app.clickName');
 	event.stopPropagation();
-	let name: HTMLElement = this;
-	let member: HTMLElement = name.parentElement;
-	let state = <TreeState>event.data;
-	let controlForm = state.controlForm;
-	if (controlForm) {controlForm.closeForm();}
-	controlForm = new EditMemberForm(state);
-	controlForm.build(<Member>state.hash.getNode(member));
-	state.controlForm = controlForm;
+	let nameElement: HTMLElement = this;
+	let memberElement: HTMLElement = nameElement.parentElement;
+	let state = <iTreeState>event.data;
+	state.manipulate();
+	state.form = state.formFactory.create('editMemberForm');
+	let member = <iMember>state.hash.getNode(memberElement);
+	state.select(member);
+	state.formControl = new EditMemberForm(state);
 }
 function clickValue(event: JQueryEventObject) {
+	console.log('app.clickValue');
 	event.stopPropagation();
 	let valueElement: HTMLElement = this;
-	let state = <TreeState>event.data;
-	let controlForm = state.controlForm;
-	if (controlForm) {controlForm.closeForm();}
-	state.controlForm = controlForm = null;
-	let value = <Value>state.hash.getNode(valueElement);
+	let state = <iTreeState>event.data;
+	state.manipulate();
+	let value = <iValue>state.hash.getNode(valueElement);
 	let type: ValueType = value.type;
+	state.select(value);
 	switch (type) {
-		case 'u': controlForm = new SwitchTypeForm(state); break;
-		case 'b': value.setValue(!value.getValue()); break;
-		case 's': controlForm = new EditableValueForm(state); break;
-		case 'n': controlForm = new EditableValueForm(state); break;
-		case 'o': controlForm = new AddMemberForm(state); break;
-		case 'a': controlForm = new AddItemForm(state); break;
+		case 'u':
+			state.form = state.formFactory.create('switchTypeForm');
+			state.formControl = new SwitchTypeForm(state);
+			break;
+		case 'b':
+			value.setValue(!value.getValue());
+			state.navigate();
+			break;
+		case 's':
+			state.form = state.formFactory.create('editableValueForm');
+			state.formControl = new EditableValueForm(state);
+			break;
+		case 'n':
+			state.form = state.formFactory.create('editableValueForm');
+			state.formControl = new EditableValueForm(state);
+			break;
+		case 'o':
+			state.form = state.formFactory.create('addMemberForm');
+			state.formControl = new AddMemberForm(state);
+			break;
+		case 'a':
+			state.form = state.formFactory.create('addItemForm');
+			state.formControl = new AddItemForm(state);
+			break;
 	}
-	state.controlForm = controlForm;
-	controlForm && controlForm.build(value);
 }

@@ -1,12 +1,16 @@
-///<reference path="./typings/NodeEngine.d.ts" />
-///<reference path="./typings/NodeHash.d.ts" />
+///<reference path="./typings/iNodeEngine.d.ts" />
+///<reference path="./typings/iNodeHash.d.ts" />
 
 import {ElementParser,clearTextNodes,nullO} from 'NodeEngineUtils';
 
-class ProtoBase implements ProtoBase {
+class ProtoBase implements iProtoBase {
 	e: HTMLElement;
 	id: number;
-	protected _h: NodeHash;
+	protected _h: iNodeHash;
+	getParent(): iProtoBase {
+		let parent: iProtoBase = <iProtoBase>this._h.getNode(this.e.parentElement);
+		return parent;
+	}
 	getNodeId(): number {
 		return this.id;
 	}
@@ -20,7 +24,7 @@ class ProtoBase implements ProtoBase {
 		}
 		return e;
 	}
-	protected _init(h: NodeHash, input: HTMLElement|string): HTMLElement {
+	protected _init(h: iNodeHash, input: HTMLElement|string): HTMLElement {
 		this._h = h;
 		if (input instanceof HTMLElement) {
 			this.e = input;
@@ -30,14 +34,18 @@ class ProtoBase implements ProtoBase {
 		this.id = this._h.register(this);
 		return this.e;
 	}
-	protected _append(c: ProtoBase, b?: ProtoBase) {
+	protected _append(c: iProtoBase, b?: iProtoBase) {
 		this.e.insertBefore(c.e,b?b.e:null);
 	}
 }
-class Value extends ProtoBase implements Value {
+class Value extends ProtoBase implements iValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: ValueContent;
+	getParentContainer(): iValueContainer {
+		let parentTag = this.e.parentElement.tagName;
+		return parentTag === 'ITEM' || parentTag === 'MEMBER' ? <iValueContainer>this.getParent() : null;
+	}
 	isEmpty(): boolean {
 		return this.e.innerHTML === '&nbsp;';
 	}
@@ -58,7 +66,7 @@ class Value extends ProtoBase implements Value {
 		this._defaultValue(this.e);
 		return this.e;
 	}
-	protected _init(h: NodeHash, input: HTMLElement|string): HTMLElement {
+	protected _init(h: iNodeHash, input: HTMLElement|string): HTMLElement {
 		let e: HTMLElement;
 		let type: ValueType;
 		if (input instanceof HTMLElement) {
@@ -82,11 +90,11 @@ class Value extends ProtoBase implements Value {
 	}
 }
 
-class NullValue extends Value implements Value {
+class NullValue extends Value implements iValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: ValueContent;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this._init(h,e||'u');
 	}
@@ -94,11 +102,11 @@ class NullValue extends Value implements Value {
 		return 'null';
 	}
 }
-class StringValue extends Value implements Value {
+class StringValue extends Value implements iValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: string;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this._init(h,e||'s');
 	}
@@ -128,11 +136,11 @@ class StringValue extends Value implements Value {
 		return value === '&nbsp;' ? '' : value;
 	}
 }
-class BoolValue extends Value implements Value {
+class BoolValue extends Value implements iValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: boolean;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this._init(h,e||'b');
 	}
@@ -160,11 +168,11 @@ class BoolValue extends Value implements Value {
 		return value;
 	}
 }
-class NumberValue extends Value implements Value {
+class NumberValue extends Value implements iValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: number;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this._init(h,e||'n');
 	}
@@ -198,13 +206,13 @@ class NumberValue extends Value implements Value {
 	}
 }
 
-class ArrayValue extends Value implements ArrayValue {
+class ArrayValue extends Value implements iArrayValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: ValueContent;
-	items: Item[];
+	items: iItem[];
 	s: number;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this.items = [];
 		this.s = 0;
@@ -213,37 +221,37 @@ class ArrayValue extends Value implements ArrayValue {
 	isComplex(): boolean {
 		return true;
 	}
-	getItem(index: number): Item {
+	getItem(index: number): iItem {
 		return this.items[index] || null;
 	}
-	getItemValue(index: number): Value {
+	getItemValue(index: number): iValue {
 		return this.items[index] ? this.items[index].v : null;
 	}
-	addItem(type: ValueType, offset?: number): Value {
+	addItem(type: ValueType, offset?: number): iValue {
 		if (offset === undefined || offset > this.s) {offset = this.s;}
 		else
 		if (offset < 0) {
 			if (!this.s) {offset = 0;}
 			while (offset < 0) {offset += this.s;}
 		}
-		let item: Item = new Item(this._h,type);
-		let refItem: Item = this.items[offset] || null;
+		let item = new Item(this._h,type);
+		let refItem: iItem = this.items[offset] || null;
 		this.items.splice(offset,0,item);
 		if (this.isEmpty()) {clearTextNodes(this.e);}
 		this._append(item,refItem);
 		this.s++;
 		return item.v;
 	}
-	addItems(amount: number, type: ValueType, offset?: number): Value[] {
+	addItems(amount: number, type: ValueType, offset?: number): iValue[] {
 		if (offset === undefined || offset > this.s) {offset = this.s;}
 		else
 		if (offset < 0) {
 			if (!this.s) {offset = 0;}
 			while (offset < 0) {offset += this.s;}
 		}
-		let a: Value[] = [];
+		let a: iValue[] = [];
 		let item: Item;
-		let refItem: Item = this.items[offset] || null;
+		let refItem: iItem = this.items[offset] || null;
 		if (amount && this.isEmpty()) {clearTextNodes(this.e);}
 		while (amount--) {
 			item = new Item(this._h,type);
@@ -255,7 +263,7 @@ class ArrayValue extends Value implements ArrayValue {
 		return a;
 	}
 	removeItem(index: number) {
-		let item: Item = this.items[index];
+		let item: iItem = this.items[index];
 		if (item) {
 			item._remove(true);
 			this.items.splice(index,1);
@@ -269,6 +277,12 @@ class ArrayValue extends Value implements ArrayValue {
 		this.s = 0;
 		this.items = [];
 		this._defaultValue(this.e);
+	}
+	first(): iValueContainer {
+		return this.items[0] || null;
+	}
+	last(): iValueContainer {
+		return this.items[this.s-1] || null;
 	}
 	_remove(unlink: boolean) {
 		let i: number = this.s;
@@ -295,13 +309,13 @@ class ArrayValue extends Value implements ArrayValue {
 		return null;
 	}
 }
-class ObjectValue extends Value implements ObjectValue {
+class ObjectValue extends Value implements iObjectValue {
 	e: HTMLElement;
 	type: ValueType;
 	value: ValueContent;
-	members: {[name:string]: Member};
+	members: {[name:string]: iMember};
 	s: number;
-	constructor(h: NodeHash, e: HTMLElement) {
+	constructor(h: iNodeHash, e: HTMLElement) {
 		super();
 		this.members = nullO();
 		this.s = 0;
@@ -310,10 +324,10 @@ class ObjectValue extends Value implements ObjectValue {
 	isComplex(): boolean {
 		return true;
 	}
-	getMember(name: string): Member {
+	getMember(name: string): iMember {
 		return this.members[name] || null;
 	}
-	getMemberValue(name: string): Value {
+	getMemberValue(name: string): iValue {
 		return this.members[name] ? this.members[name].v : null;
 	}
 	getMemberNames(): string[] {
@@ -322,8 +336,8 @@ class ObjectValue extends Value implements ObjectValue {
 		for (i in this.members) {a.push(i);}
 		return a;
 	}
-	addMember(name: string, type: ValueType): Value {
-		let member: Member = this.members[name];
+	addMember(name: string, type: ValueType): iValue {
+		let member: iMember = this.members[name];
 		if (!member) {
 			member = new Member(this._h,name,type);
 			this.members[name] = member;
@@ -334,7 +348,7 @@ class ObjectValue extends Value implements ObjectValue {
 		return member ? member.v : null;
 	}
 	removeMember(name: string) {
-		let member: Member = this.members[name];
+		let member: iMember = this.members[name];
 		if (member) {
 			let e: HTMLElement = member._remove(true);
 			delete this.members[name];
@@ -343,7 +357,7 @@ class ObjectValue extends Value implements ObjectValue {
 		}
 	}
 	renameMember(oldName: string, newName: string) {
-		let member: Member = this.members[oldName];
+		let member: iMember = this.members[oldName];
 		if (member && !this.members[newName]) {
 			member.setName(newName);
 			this.members[newName] = member;
@@ -358,6 +372,16 @@ class ObjectValue extends Value implements ObjectValue {
 		}
 		this.s = 0;
 		this._defaultValue(this.e);
+	}
+	first(): iValueContainer {
+		let e = <HTMLElement>this.e.firstElementChild;
+		let c = e ? this._h.getNode(e) : null;
+		return <iValueContainer>c || null;
+	}
+	last(): iValueContainer {
+		let e = <HTMLElement>this.e.lastElementChild;
+		let c = e ? this._h.getNode(e) : null;
+		return <iValueContainer>c || null;
 	}
 	toString() {
 		let r='', i=0, k;
@@ -388,20 +412,29 @@ class ObjectValue extends Value implements ObjectValue {
 		return null;
 	}
 }
-class ValueContainer extends ProtoBase implements ValueContainer {
-	v: Value;
-	getParent(): Value {
-		let parent: Value = <Value>this._h.getNode(this.e.parentElement);
-		return parent;
+class ValueContainer extends ProtoBase implements iValueContainer {
+	v: iValue;
+	getParentValue(): iComplexValue {
+		return <any>this.getParent();
 	}
 	getType(): ValueType {
 		return this.v.type;
 	}
-	setType(type: ValueType): Value {
+	setType(type: ValueType): iValue {
 		this.v._remove(true);
 		this.v = NodeEngine(this._h,type);
 		this._append(this.v);
 		return this.v;
+	}
+	prev(): iValueContainer {
+		let e = <HTMLElement>this.e.previousElementSibling;
+		let c = e ? this._h.getNode(e) : null;
+		return <iValueContainer>c;
+	}
+	next(): iValueContainer {
+		let e = <HTMLElement>this.e.nextElementSibling;
+		let c = e ? this._h.getNode(e) : null;
+		return <iValueContainer>c;
 	}
 	_remove(unlink: boolean): HTMLElement {
 		let e: HTMLElement = this.v._remove(unlink);
@@ -409,9 +442,9 @@ class ValueContainer extends ProtoBase implements ValueContainer {
 		return super._remove(unlink);
 	}
 }
-class Item extends ValueContainer implements Item {
-	v: Value;
-	constructor(h: NodeHash, input: HTMLElement|ValueType) {
+class Item extends ValueContainer implements iItem {
+	v: iValue;
+	constructor(h: iNodeHash, input: HTMLElement|ValueType) {
 		super();
 		this._init(h,input);
 	}
@@ -421,7 +454,7 @@ class Item extends ValueContainer implements Item {
 		while( (c = c.previousElementSibling) != null ) {i++;}
 		return i;
 	}
-	protected _init(h: NodeHash, input: HTMLElement|ValueType) {
+	protected _init(h: iNodeHash, input: HTMLElement|ValueType) {
 		let e: HTMLElement;
 		if (input instanceof HTMLElement) {
 			e = super._init(h,input);
@@ -435,11 +468,11 @@ class Item extends ValueContainer implements Item {
 	}
 
 }
-class Member extends ValueContainer implements Member {
+class Member extends ValueContainer implements iMember {
 	e: HTMLElement;
-	n: MemberName;
-	v: Value;
-	constructor(h: NodeHash, name: string, input: HTMLElement|ValueType) {
+	n: iMemberName;
+	v: iValue;
+	constructor(h: iNodeHash, name: string, input: HTMLElement|ValueType) {
 		super();
 		let e: HTMLElement = this._init(h,input);
 		if (input instanceof HTMLElement) {
@@ -455,7 +488,7 @@ class Member extends ValueContainer implements Member {
 	setName(name: string) {
 		this.n.setName(name);
 	}
-	protected _init(h: NodeHash, input: HTMLElement|ValueType): HTMLElement {
+	protected _init(h: iNodeHash, input: HTMLElement|ValueType): HTMLElement {
 		let e: HTMLElement;
 		if (input instanceof HTMLElement) {
 			e = super._init(h,input);
@@ -468,10 +501,10 @@ class Member extends ValueContainer implements Member {
 		return e;
 	}
 }
-class MemberName extends ProtoBase implements MemberName {
+class MemberName extends ProtoBase implements iMemberName {
 	e: HTMLElement;
 	name: string;
-	constructor(h: NodeHash, input: HTMLElement|string) {
+	constructor(h: iNodeHash, input: HTMLElement|string) {
 		super();
 		if (input instanceof HTMLElement) {
 			this._init(h,input);
@@ -486,10 +519,10 @@ class MemberName extends ProtoBase implements MemberName {
 	}
 }
 
-export function NodeEngine(h: NodeHash, input: HTMLElement|ValueType): Value {
+export function NodeEngine(h: iNodeHash, input: HTMLElement|ValueType): iValue {
 	let e: HTMLElement = null;
 	let type: ValueType;
-	let o: Value;
+	let o: iValue;
 	if (input instanceof HTMLElement) {
 		e = input;
 		type = <ValueType>e.dataset['t'];

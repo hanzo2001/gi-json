@@ -1,17 +1,17 @@
-///<reference path="./typings/NodeHash.d.ts" />
+///<reference path="./typings/iNodeHash.d.ts" />
 
-export class NodeHash implements NodeHash {
+export class NodeHash implements iNodeHash {
 	private i: number = 0;
-	private h: {[id:number]:Value} = {};
+	private h: {[id:number]:iValue} = {};
 	isRegistered(e: HTMLElement) {
 		let id: number = ~~e.dataset['nid'] || 0;
 		return id && !!this.h[id];
 	}
-	getNode(e: HTMLElement): Value {
+	getNode(e: HTMLElement): iValue {
 		let id: number = ~~e.dataset['nid'];
 		return this.h[id] || null;
 	}
-	register(value: Value): number {
+	register(value: iValue): number {
 		let id: number = ++this.i;
 		this.h[id] = value;
 		value.e.dataset['nid'] = id+'';

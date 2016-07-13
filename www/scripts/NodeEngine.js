@@ -8,6 +8,10 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
     var ProtoBase = (function () {
         function ProtoBase() {
         }
+        ProtoBase.prototype.getParent = function () {
+            var parent = this._h.getNode(this.e.parentElement);
+            return parent;
+        };
         ProtoBase.prototype.getNodeId = function () {
             return this.id;
         };
@@ -42,6 +46,10 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
         function Value() {
             _super.apply(this, arguments);
         }
+        Value.prototype.getParentContainer = function () {
+            var parentTag = this.e.parentElement.tagName;
+            return parentTag === 'ITEM' || parentTag === 'MEMBER' ? this.getParent() : null;
+        };
         Value.prototype.isEmpty = function () {
             return this.e.innerHTML === '&nbsp;';
         };
@@ -289,6 +297,12 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             this.items = [];
             this._defaultValue(this.e);
         };
+        ArrayValue.prototype.first = function () {
+            return this.items[0] || null;
+        };
+        ArrayValue.prototype.last = function () {
+            return this.items[this.s - 1] || null;
+        };
         ArrayValue.prototype._remove = function (unlink) {
             var i = this.s;
             while (i--) {
@@ -383,6 +397,16 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             this.s = 0;
             this._defaultValue(this.e);
         };
+        ObjectValue.prototype.first = function () {
+            var e = this.e.firstElementChild;
+            var c = e ? this._h.getNode(e) : null;
+            return c || null;
+        };
+        ObjectValue.prototype.last = function () {
+            var e = this.e.lastElementChild;
+            var c = e ? this._h.getNode(e) : null;
+            return c || null;
+        };
         ObjectValue.prototype.toString = function () {
             var r = '', i = 0, k;
             if (this.s) {
@@ -418,9 +442,8 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
         function ValueContainer() {
             _super.apply(this, arguments);
         }
-        ValueContainer.prototype.getParent = function () {
-            var parent = this._h.getNode(this.e.parentElement);
-            return parent;
+        ValueContainer.prototype.getParentValue = function () {
+            return this.getParent();
         };
         ValueContainer.prototype.getType = function () {
             return this.v.type;
@@ -430,6 +453,16 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             this.v = NodeEngine(this._h, type);
             this._append(this.v);
             return this.v;
+        };
+        ValueContainer.prototype.prev = function () {
+            var e = this.e.previousElementSibling;
+            var c = e ? this._h.getNode(e) : null;
+            return c;
+        };
+        ValueContainer.prototype.next = function () {
+            var e = this.e.nextElementSibling;
+            var c = e ? this._h.getNode(e) : null;
+            return c;
         };
         ValueContainer.prototype._remove = function (unlink) {
             var e = this.v._remove(unlink);

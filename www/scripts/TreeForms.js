@@ -27,7 +27,6 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
         }
         TreeForm.prototype.build = function (o) { };
         TreeForm.prototype._build = function () {
-            this.state.controlForm = this;
             this.form = this.showTemplate(this.tid, this.state.formBase, this._formContextData);
             var behaviors = this.form.data('behavior');
             if (behaviors) {
@@ -41,9 +40,7 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
             if (this._sid) {
                 $(document).off('keyup.' + this.tid);
             }
-            this.state.controlForm = null;
             this.form.remove();
-            this.allowClicks();
         };
         TreeForm.prototype.blockClicks = function () {
             this.state.blockClicks();
@@ -85,11 +82,11 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
             }
             html = $(script(data));
             $(target).append(html);
-            this.state.blockClicks();
             return html;
         };
         return TreeForm;
     }());
+    exports.TreeForm = TreeForm;
     var AddItemForm = (function (_super) {
         __extends(AddItemForm, _super);
         function AddItemForm() {
@@ -333,13 +330,13 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
                 dflt: null
             };
             _super.prototype._build.call(this);
+            this.form.find('select[name=rootType]').focus();
         };
         StartTreeForm.prototype.createRoot = function (event) {
             var type = this.form.find('select[name=rootType]').val();
             var value = this.state.factory(type);
-            this.state.rootValue = value;
-            this.state.rootElement = value.e;
-            this.state.treeBase.appendChild(this.state.rootValue.e);
+            this.state.select(value);
+            console.log('created root value');
             this.closeForm();
         };
         return StartTreeForm;

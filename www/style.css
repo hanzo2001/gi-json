@@ -78,3 +78,8 @@ value[data-t=s] {
 	color:#c00;
 	border-color:#c00;
 }
+#treeBase .selectedNode {
+	border-color: yellow;
+	background-color: #ff8;
+	box-shadow:-1pt 1pt 1pt yellow;
+}

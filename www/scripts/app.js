@@ -1,18 +1,22 @@
-define(["require", "exports", "jquery", "./NodeHash", "./NodeEngine", "./TreeState", "./TreeForms", "helpers"], function (require, exports, $, NodeHash_1, NodeEngine_1, TreeState_1, TreeForms_1) {
+define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./NodeEngine", "./TreeState", "./Forms/KeyboardShortcutRegistry", "./Forms/Actions/StartTreeForm", "./Forms/Actions/AddItemForm", "./Forms/Actions/AddMemberForm", "./Forms/Actions/EditItemContainerForm", "./Forms/Actions/EditMemberContainerForm", "./Forms/Actions/EditMemberForm", "./Forms/Actions/EditableValueForm", "./Forms/Actions/SwitchTypeForm", "./Forms/GenericTreeFormFactory", "helpers"], function (require, exports, $, NodeEngineUtils_1, NodeHash_1, NodeEngine_1, TreeState_1, KeyboardShortcutRegistry_1, StartTreeForm_1, AddItemForm_1, AddMemberForm_1, EditItemContainerForm_1, EditMemberContainerForm_1, EditMemberForm_1, EditableValueForm_1, SwitchTypeForm_1, GenericTreeFormFactory_1) {
     "use strict";
+    var state = new TreeState_1.TreeState();
     $(function () {
         try {
-            var engine = NodeEngine_1.NodeEngine;
-            var hash = new NodeHash_1.NodeHash();
-            var state = new TreeState_1.TreeState(hash, engine);
+            state.hash = new NodeHash_1.NodeHash();
+            state.engine = NodeEngine_1.NodeEngine;
             state.treeBase = document.getElementById('treeBase');
             state.formBase = document.getElementById('formBase');
-            state.rootElement = state.treeBase.childNodes.item(1);
-            if (state.rootElement) {
-                state.rootValue = state.factory(state.rootElement);
+            state.formFactory = new GenericTreeFormFactory_1.GenericTreeFormFactory(state.formBase);
+            state.kbsRegister = new KeyboardShortcutRegistry_1.KeyboardShortcutRegistry(document);
+            var rootElement = NodeEngineUtils_1.clearTextNodes(state.treeBase).childNodes.item(0);
+            if (rootElement) {
+                state.factory(rootElement);
+                state.navigate();
             }
             else {
-                (new TreeForms_1.StartTreeForm(state)).build();
+                state.form = state.formFactory.create('startTreeForm');
+                state.formControl = new StartTreeForm_1.StartTreeForm(state);
             }
             $(state.treeBase)
                 .on('click', 'member', state, clickMember)
@@ -32,74 +36,78 @@ define(["require", "exports", "jquery", "./NodeHash", "./NodeEngine", "./TreeSta
         }
     });
     function clickMember(event) {
+        console.log('app.clickMember');
         event.stopPropagation();
         var memberElement = this;
         var state = event.data;
-        var controlForm = state.controlForm;
-        if (controlForm) {
-            controlForm.closeForm();
+        try {
+            state.manipulate();
+            state.form = state.formFactory.create('editMemberContainerForm');
+            var member = state.hash.getNode(memberElement);
+            state.select(member);
+            state.formControl = new EditMemberContainerForm_1.EditMemberContainerForm(state);
         }
-        controlForm = new TreeForms_1.EditMemberContainerForm(state);
-        controlForm.build(state.hash.getNode(memberElement));
-        state.controlForm = controlForm;
+        catch (e) {
+            console.log(e);
+        }
     }
     function clickItem(event) {
+        console.log('app.clickItem');
         event.stopPropagation();
         var itemElement = this;
         var state = event.data;
-        var controlForm = state.controlForm;
-        if (controlForm) {
-            controlForm.closeForm();
-        }
-        controlForm = new TreeForms_1.EditItemContainerForm(state);
-        controlForm.build(state.hash.getNode(itemElement));
-        state.controlForm = controlForm;
+        state.manipulate();
+        state.form = state.formFactory.create('editItemContainerForm');
+        var item = state.hash.getNode(itemElement);
+        state.select(item);
+        state.formControl = new EditItemContainerForm_1.EditItemContainerForm(state);
     }
     function clickName(event) {
+        console.log('app.clickName');
         event.stopPropagation();
-        var name = this;
-        var member = name.parentElement;
+        var nameElement = this;
+        var memberElement = nameElement.parentElement;
         var state = event.data;
-        var controlForm = state.controlForm;
-        if (controlForm) {
-            controlForm.closeForm();
-        }
-        controlForm = new TreeForms_1.EditMemberForm(state);
-        controlForm.build(state.hash.getNode(member));
-        state.controlForm = controlForm;
+        state.manipulate();
+        state.form = state.formFactory.create('editMemberForm');
+        var member = state.hash.getNode(memberElement);
+        state.select(member);
+        state.formControl = new EditMemberForm_1.EditMemberForm(state);
     }
     function clickValue(event) {
+        console.log('app.clickValue');
         event.stopPropagation();
         var valueElement = this;
         var state = event.data;
-        var controlForm = state.controlForm;
-        if (controlForm) {
-            controlForm.closeForm();
-        }
-        state.controlForm = controlForm = null;
+        state.manipulate();
         var value = state.hash.getNode(valueElement);
         var type = value.type;
+        state.select(value);
         switch (type) {
             case 'u':
-                controlForm = new TreeForms_1.SwitchTypeForm(state);
+                state.form = state.formFactory.create('switchTypeForm');
+                state.formControl = new SwitchTypeForm_1.SwitchTypeForm(state);
                 break;
             case 'b':
                 value.setValue(!value.getValue());
+                state.navigate();
                 break;
             case 's':
-                controlForm = new TreeForms_1.EditableValueForm(state);
+                state.form = state.formFactory.create('editableValueForm');
+                state.formControl = new EditableValueForm_1.EditableValueForm(state);
                 break;
             case 'n':
-                controlForm = new TreeForms_1.EditableValueForm(state);
+                state.form = state.formFactory.create('editableValueForm');
+                state.formControl = new EditableValueForm_1.EditableValueForm(state);
                 break;
             case 'o':
-                controlForm = new TreeForms_1.AddMemberForm(state);
+                state.form = state.formFactory.create('addMemberForm');
+                state.formControl = new AddMemberForm_1.AddMemberForm(state);
                 break;
             case 'a':
-                controlForm = new TreeForms_1.AddItemForm(state);
+                state.form = state.formFactory.create('addItemForm');
+                state.formControl = new AddItemForm_1.AddItemForm(state);
                 break;
         }
-        state.controlForm = controlForm;
-        controlForm && controlForm.build(value);
     }
 });
