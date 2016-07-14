@@ -45,8 +45,9 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             var member = this.target;
             var name = member.getName();
             var objectValue = member.getParent();
+            var next = member.next() || member.prev() || objectValue;
             objectValue.removeMember(name);
-            this.state.select(objectValue);
+            this.state.select(next);
             this._close();
         };
         return EditMemberForm;

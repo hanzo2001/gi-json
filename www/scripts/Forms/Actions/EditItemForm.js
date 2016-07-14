@@ -33,8 +33,9 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             var item = this.target;
             var arrayValue = item.getParentValue();
             var index = item.getIndex();
+            var next = item.next() || item.prev() || arrayValue;
             arrayValue.removeItem(index);
-            this.state.select(arrayValue);
+            this.state.select(next);
             this._close();
         };
         return EditItemForm;

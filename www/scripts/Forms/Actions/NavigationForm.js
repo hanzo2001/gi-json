@@ -38,8 +38,8 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
         NavigationForm.prototype.goPrev = function (event) {
             var selected = this.state.selectedNode;
             if (selected.prev) {
-                var c = selected.prev();
-                c && this.state.select(c);
+                var c = selected.prev() || selected.getParentValue().last();
+                this.state.select(c);
             }
             else {
                 var p = selected.getParent();
@@ -66,8 +66,8 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
         NavigationForm.prototype.goNext = function (event) {
             var selected = this.state.selectedNode;
             if (selected.next) {
-                var c = selected.next();
-                c && this.state.select(c);
+                var c = selected.next() || selected.getParentValue().first();
+                this.state.select(c);
             }
             else {
                 var p = selected.getParent();

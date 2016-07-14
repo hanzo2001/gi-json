@@ -32,8 +32,8 @@ export class NavigationForm extends GenericFormAction {
 	protected goPrev(event: JQueryEventObject) {
 		let selected = <iValueContainer>this.state.selectedNode;
 		if (selected.prev) {
-			let c = selected.prev();
-			c && this.state.select(c);
+			let c = selected.prev() || selected.getParentValue().last();
+			this.state.select(c);
 		} else {
 			let p = <iValueContainer>selected.getParent();
 			if (p && p.prev) {
@@ -58,8 +58,8 @@ export class NavigationForm extends GenericFormAction {
 	protected goNext(event: JQueryEventObject) {
 		let selected = <iValueContainer>this.state.selectedNode;
 		if (selected.next) {
-			let c = selected.next();
-			c && this.state.select(c);
+			let c = selected.next() || selected.getParentValue().first();
+			this.state.select(c);
 		} else {
 			let p = <iValueContainer>selected.getParent();
 			if (p && p.next) {

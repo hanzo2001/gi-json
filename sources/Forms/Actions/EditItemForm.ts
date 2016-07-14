@@ -30,8 +30,9 @@ export class EditItemForm extends GenericFormAction {
 		let item = <iItem>this.target;
 		let arrayValue = <iArrayValue>item.getParentValue();
 		let index = item.getIndex();
+		let next = item.next() || item.prev() || arrayValue;
 		arrayValue.removeItem(index);
-		this.state.select(arrayValue);
+		this.state.select(next);
 		this._close();
 	}
 }

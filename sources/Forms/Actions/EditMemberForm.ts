@@ -39,8 +39,9 @@ export class EditMemberForm extends GenericFormAction {
 		let member = <iMember>this.target;
 		let name = member.getName();
 		let objectValue = <iObjectValue>member.getParent();
+		let next = member.next() || member.prev() || objectValue;
 		objectValue.removeMember(name);
-		this.state.select(objectValue);
+		this.state.select(next);
 		this._close();
 	}
 }
