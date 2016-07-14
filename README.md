@@ -5,6 +5,10 @@ Graphically Interfaced JSON
 
 - [ ] fix float number parsing
 - [ ] protect string input (htmlentities)
-- [ ] continue testing navigation and manipulation
-- [ ] fix edit member
-- [ ] consider fusing create member with edit member container
+- [x] **Fixed** continue testing navigation and manipulation
+- [ ] add delete operation to navigation
+- [ ] deletion operation should maneuver to parent node as last resort
+- [x] **Fixed** fix edit member
+- [x] **Discarded** consider fusing create member with edit member container
+- [ ] create tab feature
+- [ ] setup backend communication
