@@ -23,6 +23,15 @@ define(["require", "exports"], function (require, exports) {
             }
             return NaN;
         };
+        ElementParser.str2html = function (s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        };
+        ElementParser.html2str = function (s) {
+            return s.replace(/"/g, '&quot;').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
+        };
+        ElementParser.str2json = function (s) {
+            return s.replace(/"/g, '\\"');
+        };
         return ElementParser;
     }());
     exports.ElementParser = ElementParser;

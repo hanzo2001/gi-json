@@ -118,13 +118,15 @@ class StringValue extends Value implements iValue {
 	}
 	setValue(value: string) {
 		if (value === '') {
-			this._defaultValue(this.e);
+			this.value = this._defaultValue(this.e);
 		} else {
-			this.value = this.e.innerHTML = value;
+			this.e.innerHTML = ElementParser.str2html(value);
+			this.value = value;
 		}
 	}
 	toString() {
-		return '"'+this.value.replace('"','\\"')+'"';
+		let value = ElementParser.str2json(this.value);
+		return '"'+value+'"';
 	}
 	protected _defaultValue(e: HTMLElement): string {
 		e.innerHTML = '&nbsp;';
@@ -133,7 +135,7 @@ class StringValue extends Value implements iValue {
 	protected _extractValue(e: HTMLElement): string {
 		let value: string = e.innerHTML;
 		if (value === '') {this.e.innerHTML = '&nbsp;';}
-		return value === '&nbsp;' ? '' : value;
+		return value === '&nbsp;' ? '' : ElementParser.html2str(value);
 	}
 }
 class BoolValue extends Value implements iValue {
@@ -387,8 +389,7 @@ class ObjectValue extends Value implements iObjectValue {
 		let r='', i=0, k;
 		if (this.s) {
 			for (k in this.members) {
-				r += (i?',':'')+'"'+this.members[k].getName()+'":'+this.members[k].v;
-				i++;
+				r += (i++?',':'')+this.members[k];
 			}
 		}
 		return '{'+r+'}';
@@ -488,6 +489,9 @@ class Member extends ValueContainer implements iMember {
 	setName(name: string) {
 		this.n.setName(name);
 	}
+	toString() {
+		return '"'+ElementParser.str2json(this.n+'')+'":'+this.v;
+	}
 	protected _init(h: iNodeHash, input: HTMLElement|ValueType): HTMLElement {
 		let e: HTMLElement;
 		if (input instanceof HTMLElement) {
@@ -508,14 +512,18 @@ class MemberName extends ProtoBase implements iMemberName {
 		super();
 		if (input instanceof HTMLElement) {
 			this._init(h,input);
-			this.name = this.e.innerHTML;
+			this.name = ElementParser.html2str(this.e.innerHTML);
 		} else {
 			this._init(h,'name');
-			this.name = this.e.innerHTML = input;
+			this.name = input;
+			this.e.innerHTML = ElementParser.str2html(input);
 		}
 	}
 	setName(name: string) {
 		this.name = this.e.innerHTML = name;
+	}
+	toString(): string {
+		return this.name;
 	}
 }
 

@@ -14,6 +14,15 @@ export class ElementParser {
 		if (isIntRE.test(v)) {return parseInt(v);}
 		return NaN;
 	}
+	static str2html(s: string): string {
+		return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+	}
+	static html2str(s: string): string {
+		return s.replace(/"/g,'&quot;').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
+	}
+	static str2json(s: string): string {
+		return s.replace(/"/g,'\\"')
+	}
 }
 
 export function clearTextNodes(e: Node): Node {

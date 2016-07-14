@@ -28,7 +28,7 @@ define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./No
             $('#outputJSON')
                 .click(state, function (event) {
                 if (event.data.rootValue) {
-                    $('#jsonOutput').text(event.data.rootValue + '');
+                    $('#jsonOutput').html(event.data.rootValue + '');
                 }
             });
             window.t = state.rootValue;

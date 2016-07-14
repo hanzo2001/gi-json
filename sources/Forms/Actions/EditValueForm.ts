@@ -11,14 +11,14 @@ export class EditValueForm extends GenericFormAction {
 		let value = <iValue>state.selectedNode;
 		this.tid = 'editValueForm';
 		this.contextData = {
-			value : value.getDisplayValue()
+			value : value.getValue()
 		};
 		this._build(state);
 		this.formRoot.find('input[name=value]').focus();
 	}
 	protected updateValue(event: JQueryEventObject) {
 		let value = <iValue>this.target;
-		let oldValue = value.getDisplayValue();
+		let oldValue = value.getValue();
 		let newValue = this.formRoot.find('input[name=value]').val();
 		if (oldValue !== newValue) {value.setValue(newValue);}
 		this._close();

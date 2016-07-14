@@ -12,14 +12,14 @@ define(["require", "exports", "./GenericFormAction"], function (require, exports
             var value = state.selectedNode;
             this.tid = 'editValueForm';
             this.contextData = {
-                value: value.getDisplayValue()
+                value: value.getValue()
             };
             this._build(state);
             this.formRoot.find('input[name=value]').focus();
         }
         EditValueForm.prototype.updateValue = function (event) {
             var value = this.target;
-            var oldValue = value.getDisplayValue();
+            var oldValue = value.getValue();
             var newValue = this.formRoot.find('input[name=value]').val();
             if (oldValue !== newValue) {
                 value.setValue(newValue);

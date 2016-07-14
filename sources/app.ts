@@ -48,7 +48,7 @@ $(function(){
 			.on('click','value', state,clickValue);
 		$('#outputJSON')
 			.click(state,function(event: JQueryEventObject){
-				if (event.data.rootValue) {$('#jsonOutput').text(event.data.rootValue+'');}
+				if (event.data.rootValue) {$('#jsonOutput').html(event.data.rootValue+'');}
 			});
 		(<any>window).t = state.rootValue;
 	} catch (e) {

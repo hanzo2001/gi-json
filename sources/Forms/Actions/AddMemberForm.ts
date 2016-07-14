@@ -21,7 +21,7 @@ export class AddMemberForm extends GenericFormAction {
 	protected createMember(event: JQueryEventObject) {
 		let memberNameElement = this.formRoot.find('input[name=memberName]');
 		let name = memberNameElement.val();
-		if (name && !/[^\w-]/.test(name)) {
+		if (name) {
 			let objectValue = <iObjectValue>this.target;
 			let type = this.formRoot.find('select[name=memberType]').val();
 			objectValue.addMember(name,type);

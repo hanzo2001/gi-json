@@ -120,14 +120,16 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
         };
         StringValue.prototype.setValue = function (value) {
             if (value === '') {
-                this._defaultValue(this.e);
+                this.value = this._defaultValue(this.e);
             }
             else {
-                this.value = this.e.innerHTML = value;
+                this.e.innerHTML = NodeEngineUtils_1.ElementParser.str2html(value);
+                this.value = value;
             }
         };
         StringValue.prototype.toString = function () {
-            return '"' + this.value.replace('"', '\\"') + '"';
+            var value = NodeEngineUtils_1.ElementParser.str2json(this.value);
+            return '"' + value + '"';
         };
         StringValue.prototype._defaultValue = function (e) {
             e.innerHTML = '&nbsp;';
@@ -138,7 +140,7 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             if (value === '') {
                 this.e.innerHTML = '&nbsp;';
             }
-            return value === '&nbsp;' ? '' : value;
+            return value === '&nbsp;' ? '' : NodeEngineUtils_1.ElementParser.html2str(value);
         };
         return StringValue;
     }(Value));
@@ -411,8 +413,7 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             var r = '', i = 0, k;
             if (this.s) {
                 for (k in this.members) {
-                    r += (i ? ',' : '') + '"' + this.members[k].getName() + '":' + this.members[k].v;
-                    i++;
+                    r += (i++ ? ',' : '') + this.members[k];
                 }
             }
             return '{' + r + '}';
@@ -519,6 +520,9 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
         Member.prototype.setName = function (name) {
             this.n.setName(name);
         };
+        Member.prototype.toString = function () {
+            return '"' + NodeEngineUtils_1.ElementParser.str2json(this.n + '') + '":' + this.v;
+        };
         Member.prototype._init = function (h, input) {
             var e;
             if (input instanceof HTMLElement) {
@@ -540,15 +544,19 @@ define(["require", "exports", 'NodeEngineUtils'], function (require, exports, No
             _super.call(this);
             if (input instanceof HTMLElement) {
                 this._init(h, input);
-                this.name = this.e.innerHTML;
+                this.name = NodeEngineUtils_1.ElementParser.html2str(this.e.innerHTML);
             }
             else {
                 this._init(h, 'name');
-                this.name = this.e.innerHTML = input;
+                this.name = input;
+                this.e.innerHTML = NodeEngineUtils_1.ElementParser.str2html(input);
             }
         }
         MemberName.prototype.setName = function (name) {
             this.name = this.e.innerHTML = name;
+        };
+        MemberName.prototype.toString = function () {
+            return this.name;
         };
         return MemberName;
     }(ProtoBase));

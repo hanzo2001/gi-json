@@ -26,10 +26,10 @@ export class EditMemberForm extends GenericFormAction {
 		let oldType = member.getType();
 		let newNameInput = this.formRoot.find('input[name=memberName]');
 		let newName = newNameInput.val();
-		if (newName && !/[^\w-]/.test(newName)) {
-			let newType = this.formRoot.find('select[name=memberType]').val();
-			if (oldName !== newName) {objectValue.renameMember(oldName,newName);}
-			if (oldType !== newType) {member.setType(newType);}
+		let newType = this.formRoot.find('select[name=memberType]').val();
+		if (oldType !== newType) {member.setType(newType);}
+		if (oldName !== newName) {
+			objectValue.renameMember(oldName,newName);
 			this._close();
 		} else {
 			newNameInput.focus();

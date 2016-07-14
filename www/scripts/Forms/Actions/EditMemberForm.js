@@ -27,14 +27,12 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             var oldType = member.getType();
             var newNameInput = this.formRoot.find('input[name=memberName]');
             var newName = newNameInput.val();
-            if (newName && !/[^\w-]/.test(newName)) {
-                var newType = this.formRoot.find('select[name=memberType]').val();
-                if (oldName !== newName) {
-                    objectValue.renameMember(oldName, newName);
-                }
-                if (oldType !== newType) {
-                    member.setType(newType);
-                }
+            var newType = this.formRoot.find('select[name=memberType]').val();
+            if (oldType !== newType) {
+                member.setType(newType);
+            }
+            if (oldName !== newName) {
+                objectValue.renameMember(oldName, newName);
                 this._close();
             }
             else {

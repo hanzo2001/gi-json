@@ -22,7 +22,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         AddMemberForm.prototype.createMember = function (event) {
             var memberNameElement = this.formRoot.find('input[name=memberName]');
             var name = memberNameElement.val();
-            if (name && !/[^\w-]/.test(name)) {
+            if (name) {
                 var objectValue = this.target;
                 var type = this.formRoot.find('select[name=memberType]').val();
                 objectValue.addMember(name, type);
