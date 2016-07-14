@@ -77,6 +77,49 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
                 }
             }
         };
+        NavigationForm.prototype.deleteNode = function (event) {
+            var selected = this.state.selectedNode;
+            try {
+                if (selected.next) {
+                    if (selected.getName) {
+                        this._deleteMember(selected);
+                    }
+                    else {
+                        this._deleteItem(selected);
+                    }
+                }
+                else {
+                    this._deleteValue(selected);
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
+        };
+        NavigationForm.prototype._deleteMember = function (c) {
+            var o = c.getParentValue();
+            var n = c.next() || c.prev() || c.getParentValue();
+            this.state.select(n);
+            o.removeMember(c.getName());
+        };
+        NavigationForm.prototype._deleteItem = function (c) {
+            var o = c.getParentValue();
+            var n = c.next() || c.prev() || c.getParentValue();
+            this.state.select(n);
+            o.removeItem(c.getIndex());
+        };
+        NavigationForm.prototype._deleteValue = function (v) {
+            var c = v.getParentContainer();
+            if (!c) {
+                return;
+            }
+            if (c.getIndex) {
+                this._deleteItem(c);
+            }
+            else {
+                this._deleteMember(c);
+            }
+        };
         return NavigationForm;
     }(GenericFormAction_1.GenericFormAction));
     exports.NavigationForm = NavigationForm;

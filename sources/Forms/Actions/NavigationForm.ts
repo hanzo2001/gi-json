@@ -1,8 +1,10 @@
+///<reference path="../../../typings/index.d.ts" />
 ///<reference path="../../typings/index.d.ts" />
 
 import * as $ from "jquery";
 import * as Handlebars from "handlebars";
 import {GenericFormAction} from "./GenericFormAction";
+import {NodeEngine} from "../../NodeEngine";
 
 export class NavigationForm extends GenericFormAction {
 	protected tid = 'navigationForm';
@@ -66,6 +68,41 @@ export class NavigationForm extends GenericFormAction {
 				let c = p.next();
 				c && this.state.select(c.v);
 			}
+		}
+	}
+	protected deleteNode(event: JQueryEventObject) {
+		let selected: any = this.state.selectedNode;
+		try{
+		if (selected.next) {
+			if (selected.getName) {
+				this._deleteMember(selected);
+			} else {
+				this._deleteItem(selected);
+			}
+		} else {
+			this._deleteValue(selected);
+		}
+		}catch(e){console.log(e);}
+	}
+	protected _deleteMember(c: iMember) {
+		let o = <iObjectValue>c.getParentValue();
+		let n = c.next() || c.prev() || c.getParentValue();
+		this.state.select(n);
+		o.removeMember(c.getName());
+	}
+	protected _deleteItem(c: iItem) {
+		let o = <iArrayValue>c.getParentValue();
+		let n = c.next() || c.prev() || c.getParentValue();
+		this.state.select(n);
+		o.removeItem(c.getIndex());
+	}
+	protected _deleteValue(v: iValue) {
+		let c = <any>v.getParentContainer();
+		if (!c) {return;}
+		if (c.getIndex) {
+			this._deleteItem(c);
+		} else {
+			this._deleteMember(c);
 		}
 	}
 }
