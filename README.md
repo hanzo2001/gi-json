@@ -3,7 +3,7 @@ Graphically Interfaced JSON
 
 #### TODOS
 
-- [ ] fix float number parsing
+- [x] fix float number parsing
 - [ ] protect string input (htmlentities)
 - [x] **Fixed** continue testing navigation and manipulation
 - [x] **Done** improve navigation with container looping

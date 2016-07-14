@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.isFloatRE = /^(\+|-)?\d*[\.eE](\+|-)?\d+$/;
-    exports.isIntRE = /^(\+|-)?\d+$/;
+    exports.isFloatRE = /^-?(0|[1-9]\d*)(((\.\d+)|([eE]-?\d+))|(\.\d+[eE]-?\d+))$/;
+    exports.isIntRE = /^-?(0|[1-9]\d*)$/;
     var ElementParser = (function () {
         function ElementParser() {
         }

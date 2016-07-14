@@ -1,7 +1,7 @@
 ///<reference path="./typings/iNodeEngineUtils.d.ts" />
 
-export var isFloatRE = /^(\+|-)?\d*[\.eE](\+|-)?\d+$/;
-export var isIntRE   = /^(\+|-)?\d+$/;
+export var isFloatRE = /^-?(0|[1-9]\d*)(((\.\d+)|([eE]-?\d+))|(\.\d+[eE]-?\d+))$/;
+export var isIntRE   = /^-?(0|[1-9]\d*)$/;
 
 export class ElementParser {
 	static parseBool(v: string): boolean {
