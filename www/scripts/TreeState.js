@@ -4,24 +4,16 @@ define(["require", "exports", "./Forms/Actions/NavigationForm"], function (requi
         function TreeState() {
         }
         TreeState.prototype.factory = function (input) {
-            var v = this.engine(this.hash, input);
-            if (!this.rootValue) {
-                this.rootValue = v;
-                this.treeRoot = v.e;
-                this.treeBase.appendChild(v.e);
-                this.select(v);
-            }
-            return v;
+            return this.engine(this.hash, input);
         };
         TreeState.prototype.select = function (node) {
             if (node === this.selectedNode) {
                 return;
             }
-            if (this.selectedNode) {
-                this.selectedNode.e.removeAttribute('class');
-            }
+            var s = this.selectedNode;
+            s && s.e && s.e.removeAttribute('class');
+            node.e.setAttribute('class', 'selectedNode');
             this.selectedNode = node;
-            this.selectedNode.e.setAttribute('class', 'selectedNode');
         };
         TreeState.prototype.deselect = function () {
             if (this.selectedNode) {
@@ -30,17 +22,22 @@ define(["require", "exports", "./Forms/Actions/NavigationForm"], function (requi
             }
         };
         TreeState.prototype.navigate = function () {
-            console.log('state.navigate');
             this.form = this.formFactory.create('navigationForm');
             this.formControl = new NavigationForm_1.NavigationForm(this);
             this.navigating = true;
         };
         TreeState.prototype.manipulate = function () {
-            console.log('state.manipulate');
             this.formControl && this.formControl.closeForm();
             this.formControl = null;
             this.form = null;
             this.navigating = false;
+        };
+        TreeState.prototype.setRoot = function (v) {
+            this.rootValue = v;
+            this.treeRoot = v.e;
+            this.treeBase.appendChild(v.e);
+            this.select(v);
+            this.navigating = true;
         };
         return TreeState;
     }());

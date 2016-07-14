@@ -19,9 +19,9 @@ export class StartTreeForm extends GenericFormAction {
 		this.formRoot.find('select[name=rootType]').focus();
 	}
 	protected createRoot(event: JQueryEventObject) {
-		let type: ValueType = this.formRoot.find('select[name=rootType]').val();
+		let type = <ValueType>this.formRoot.find('select[name=rootType]').val();
 		let value = this.state.factory(type);
-		this.state.select(value);
+		this.state.setRoot(value);
 		this._close();
 	}
 }

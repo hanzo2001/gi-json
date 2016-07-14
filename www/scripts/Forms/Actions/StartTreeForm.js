@@ -21,7 +21,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         StartTreeForm.prototype.createRoot = function (event) {
             var type = this.formRoot.find('select[name=rootType]').val();
             var value = this.state.factory(type);
-            this.state.select(value);
+            this.state.setRoot(value);
             this._close();
         };
         return StartTreeForm;

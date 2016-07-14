@@ -1,8 +1,9 @@
-define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./NodeEngine", "./TreeState", "./Forms/KeyboardShortcutRegistry", "./Forms/Actions/StartTreeForm", "./Forms/Actions/AddItemForm", "./Forms/Actions/AddMemberForm", "./Forms/Actions/EditItemContainerForm", "./Forms/Actions/EditMemberContainerForm", "./Forms/Actions/EditMemberForm", "./Forms/Actions/EditableValueForm", "./Forms/Actions/SwitchTypeForm", "./Forms/GenericTreeFormFactory", "helpers"], function (require, exports, $, NodeEngineUtils_1, NodeHash_1, NodeEngine_1, TreeState_1, KeyboardShortcutRegistry_1, StartTreeForm_1, AddItemForm_1, AddMemberForm_1, EditItemContainerForm_1, EditMemberContainerForm_1, EditMemberForm_1, EditableValueForm_1, SwitchTypeForm_1, GenericTreeFormFactory_1) {
+define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./NodeEngine", "./TreeState", "./Forms/KeyboardShortcutRegistry", "./Forms/GenericTreeFormFactory", "./Forms/Actions/StartTreeForm", "./Forms/Actions/AddItemForm", "./Forms/Actions/AddMemberForm", "./Forms/Actions/EditItemForm", "./Forms/Actions/EditMemberForm", "./Forms/Actions/EditValueForm", "./Forms/Actions/SwitchTypeForm", "helpers"], function (require, exports, $, NodeEngineUtils_1, NodeHash_1, NodeEngine_1, TreeState_1, KeyboardShortcutRegistry_1, GenericTreeFormFactory_1, StartTreeForm_1, AddItemForm_1, AddMemberForm_1, EditItemForm_1, EditMemberForm_1, EditValueForm_1, SwitchTypeForm_1) {
     "use strict";
     var state = new TreeState_1.TreeState();
     $(function () {
         try {
+            state.navigating = false;
             state.hash = new NodeHash_1.NodeHash();
             state.engine = NodeEngine_1.NodeEngine;
             state.treeBase = document.getElementById('treeBase');
@@ -11,7 +12,8 @@ define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./No
             state.kbsRegister = new KeyboardShortcutRegistry_1.KeyboardShortcutRegistry(document);
             var rootElement = NodeEngineUtils_1.clearTextNodes(state.treeBase).childNodes.item(0);
             if (rootElement) {
-                state.factory(rootElement);
+                var v = state.factory(rootElement);
+                state.setRoot(v);
                 state.navigate();
             }
             else {
@@ -35,53 +37,44 @@ define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./No
             console.log(e);
         }
     });
-    function clickMember(event) {
-        console.log('app.clickMember');
-        event.stopPropagation();
-        var memberElement = this;
-        var state = event.data;
-        try {
-            state.manipulate();
-            state.form = state.formFactory.create('editMemberContainerForm');
-            var member = state.hash.getNode(memberElement);
-            state.select(member);
-            state.formControl = new EditMemberContainerForm_1.EditMemberContainerForm(state);
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
     function clickItem(event) {
-        console.log('app.clickItem');
         event.stopPropagation();
         var itemElement = this;
         var state = event.data;
-        state.manipulate();
-        state.form = state.formFactory.create('editItemContainerForm');
         var item = state.hash.getNode(itemElement);
+        state.manipulate();
         state.select(item);
-        state.formControl = new EditItemContainerForm_1.EditItemContainerForm(state);
+        state.form = state.formFactory.create('editItemForm');
+        state.formControl = new EditItemForm_1.EditItemForm(state);
+    }
+    function clickMember(event) {
+        event.stopPropagation();
+        var memberElement = this;
+        var state = event.data;
+        var member = state.hash.getNode(memberElement);
+        state.manipulate();
+        state.select(member);
+        state.form = state.formFactory.create('editMemberForm');
+        state.formControl = new EditMemberForm_1.EditMemberForm(state);
     }
     function clickName(event) {
-        console.log('app.clickName');
         event.stopPropagation();
         var nameElement = this;
         var memberElement = nameElement.parentElement;
         var state = event.data;
-        state.manipulate();
-        state.form = state.formFactory.create('editMemberForm');
         var member = state.hash.getNode(memberElement);
+        state.manipulate();
         state.select(member);
+        state.form = state.formFactory.create('editMemberForm');
         state.formControl = new EditMemberForm_1.EditMemberForm(state);
     }
     function clickValue(event) {
-        console.log('app.clickValue');
         event.stopPropagation();
         var valueElement = this;
         var state = event.data;
-        state.manipulate();
         var value = state.hash.getNode(valueElement);
         var type = value.type;
+        state.manipulate();
         state.select(value);
         switch (type) {
             case 'u':
@@ -93,12 +86,12 @@ define(["require", "exports", "jquery", "./NodeEngineUtils", "./NodeHash", "./No
                 state.navigate();
                 break;
             case 's':
-                state.form = state.formFactory.create('editableValueForm');
-                state.formControl = new EditableValueForm_1.EditableValueForm(state);
+                state.form = state.formFactory.create('editValueForm');
+                state.formControl = new EditValueForm_1.EditValueForm(state);
                 break;
             case 'n':
-                state.form = state.formFactory.create('editableValueForm');
-                state.formControl = new EditableValueForm_1.EditableValueForm(state);
+                state.form = state.formFactory.create('editValueForm');
+                state.formControl = new EditValueForm_1.EditValueForm(state);
                 break;
             case 'o':
                 state.form = state.formFactory.create('addMemberForm');

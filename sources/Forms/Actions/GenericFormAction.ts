@@ -12,7 +12,6 @@ export abstract class GenericFormAction implements iGenericFormAction {
 	protected kbsManager: iKeyboardShortcutRegistry;
 	protected tid: string;
 	protected _build(state: iTreeState) {
-		console.log('genAction._build');
 		this.state = state;
 		this.form = state.form;
 		this.form.show(this.contextData);
@@ -32,7 +31,6 @@ export abstract class GenericFormAction implements iGenericFormAction {
 		}
 	}
 	protected _close() {
-		console.log('genAction._close');
 		this.kbsManager && this.kbsManager.unregisterShortcut();
 		this.form && this.form.remove();
 		this.contextData = null;
@@ -40,14 +38,11 @@ export abstract class GenericFormAction implements iGenericFormAction {
 		this.formRoot = null;
 		this.target = null;
 		this.kbsManager = null;
-		if (!this.state.navigating) {
-			this.state.navigate();
-		}
+		this.state.form = null;
+		this.state.formControl = null;
+		if (!this.state.navigating) {this.state.navigate();}
 	}
 	closeForm() {
-		console.log('genAction.closeForm');
-		try {
 		this._close();
-		} catch(e){console.log(e);}
 	}
 }

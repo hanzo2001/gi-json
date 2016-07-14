@@ -54,6 +54,15 @@
 				<button data-action="closeForm"  title="(Esc)"   data-kbs="27">Close</button>
 			</div>
 		</script>
+		<script type="text/x-handlebars-template" id="editItemForm">
+			<div data-apply-behavior="blockClicks">
+				<h3>Edit Item</h3>
+				<select name="itemType">{{{selectOptions types selectedType dflt}}}</select>
+				<button data-action="updateItem" title="(Enter)" data-kbs="13">Update</button>
+				<button data-action="deleteItem" title="(Del)"   data-kbs="46">Remove</button>
+				<button data-action="closeForm"  title="(Esc)"   data-kbs="27">Close</button>
+			</div>
+		</script>
 		<script type="text/x-handlebars-template" id="editItemContainerForm">
 			<div data-apply-behavior="blockClicks">
 				<h3>Remove Items</h3>
@@ -89,11 +98,11 @@
 				<input  name="memberName" placeholder="Member Name" value="{{name}}" />
 				<select name="memberType">{{{selectOptions types selectedType dflt}}}</select>
 				<button data-action="updateMember" title="(Enter)" data-kbs="13">Update</button>
-				<button data-action="deleteMember">Remove</button>
-				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+				<button data-action="deleteMember" title="(Del)"   data-kbs="46">Remove</button>
+				<button data-action="closeForm"    title="(Esc)"   data-kbs="27">Close</button>
 			</div>
 		</script>
-		<script type="text/x-handlebars-template" id="editableValueForm">
+		<script type="text/x-handlebars-template" id="editValueForm">
 			<div data-apply-behavior="blockClicks">
 				<h3>Edit Value</h3>
 				<input name="value" placeholder="Member Name" value="{{value}}" />

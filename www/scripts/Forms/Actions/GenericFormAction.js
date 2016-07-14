@@ -4,7 +4,6 @@ define(["require", "exports", 'jquery'], function (require, exports, $) {
         function GenericFormAction() {
         }
         GenericFormAction.prototype._build = function (state) {
-            console.log('genAction._build');
             this.state = state;
             this.form = state.form;
             this.form.show(this.contextData);
@@ -26,7 +25,6 @@ define(["require", "exports", 'jquery'], function (require, exports, $) {
             }
         };
         GenericFormAction.prototype._close = function () {
-            console.log('genAction._close');
             this.kbsManager && this.kbsManager.unregisterShortcut();
             this.form && this.form.remove();
             this.contextData = null;
@@ -34,18 +32,14 @@ define(["require", "exports", 'jquery'], function (require, exports, $) {
             this.formRoot = null;
             this.target = null;
             this.kbsManager = null;
+            this.state.form = null;
+            this.state.formControl = null;
             if (!this.state.navigating) {
                 this.state.navigate();
             }
         };
         GenericFormAction.prototype.closeForm = function () {
-            console.log('genAction.closeForm');
-            try {
-                this._close();
-            }
-            catch (e) {
-                console.log(e);
-            }
+            this._close();
         };
         return GenericFormAction;
     }());

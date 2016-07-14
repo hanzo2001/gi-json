@@ -17,22 +17,14 @@ export class TreeState implements iTreeState {
 	kbsRegister: iKeyboardShortcutRegistry;
 	navigating: boolean;
 	factory(input: HTMLElement|ValueType): iValue {
-		let v = this.engine(this.hash,input);
-		if (!this.rootValue) {
-			this.rootValue = v;
-			this.treeRoot = v.e;
-			this.treeBase.appendChild(v.e);
-			this.select(v);
-		}
-		return v;
+		return this.engine(this.hash,input);
 	}
 	select(node: iProtoBase) {
 		if (node === this.selectedNode) {return;}
-		if (this.selectedNode) {
-			this.selectedNode.e.removeAttribute('class');
-		}
+		let s = this.selectedNode;
+		s && s.e && s.e.removeAttribute('class');
+		node.e.setAttribute('class','selectedNode');
 		this.selectedNode = node;
-		this.selectedNode.e.setAttribute('class','selectedNode');
 	}
 	deselect() {
 		if (this.selectedNode) {
@@ -41,16 +33,21 @@ export class TreeState implements iTreeState {
 		}
 	}
 	navigate() {
-		console.log('state.navigate');
 		this.form = this.formFactory.create('navigationForm');
 		this.formControl = new NavigationForm(this);
 		this.navigating = true;
 	}
 	manipulate() {
-		console.log('state.manipulate');
 		this.formControl && this.formControl.closeForm();
 		this.formControl = null;
 		this.form = null;
 		this.navigating = false;
+	}
+	setRoot(v: iValue) {
+		this.rootValue = v;
+		this.treeRoot = v.e;
+		this.treeBase.appendChild(v.e);
+		this.select(v);
+		this.navigating = true;
 	}
 } 

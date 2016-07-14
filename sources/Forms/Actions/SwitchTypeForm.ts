@@ -24,7 +24,8 @@ export class SwitchTypeForm extends GenericFormAction {
 		let oldType = value.getDisplayValue();
 		let newType = this.formRoot.find('select[name=valueType]').val();
 		if (oldType !== newType) {
-			this.state.select(container.setType(newType));
+			let newValue = container.setType(newType);
+			this.state.select(newValue);
 		}
 		this._close();
 	}

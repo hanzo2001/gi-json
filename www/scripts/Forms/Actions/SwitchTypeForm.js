@@ -25,7 +25,8 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             var oldType = value.getDisplayValue();
             var newType = this.formRoot.find('select[name=valueType]').val();
             if (oldType !== newType) {
-                this.state.select(container.setType(newType));
+                var newValue = container.setType(newType);
+                this.state.select(newValue);
             }
             this._close();
         };

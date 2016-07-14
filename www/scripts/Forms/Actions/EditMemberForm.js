@@ -14,7 +14,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             this.contextData = {
                 name: member.getName(),
                 types: GenericTreeFormCommons_1.valueTypes,
-                selectedType: member.v.type,
+                selectedType: member.getType(),
                 dflt: null
             };
             this._build(state);
@@ -46,6 +46,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
             var name = member.getName();
             var objectValue = member.getParent();
             objectValue.removeMember(name);
+            this.state.select(objectValue);
             this._close();
         };
         return EditMemberForm;

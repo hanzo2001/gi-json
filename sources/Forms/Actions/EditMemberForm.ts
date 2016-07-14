@@ -13,7 +13,7 @@ export class EditMemberForm extends GenericFormAction {
 		this.contextData = {
 			name: member.getName(),
 			types: valueTypes,
-			selectedType: member.v.type,
+			selectedType: member.getType(),
 			dflt: null
 		};
 		this._build(state);
@@ -40,6 +40,7 @@ export class EditMemberForm extends GenericFormAction {
 		let name = member.getName();
 		let objectValue = <iObjectValue>member.getParent();
 		objectValue.removeMember(name);
+		this.state.select(objectValue);
 		this._close();
 	}
 }

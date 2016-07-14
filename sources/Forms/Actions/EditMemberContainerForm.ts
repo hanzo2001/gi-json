@@ -8,7 +8,6 @@ import {valueTypes} from "../GenericTreeFormCommons";
 
 export class EditMemberContainerForm extends GenericFormAction {
 	constructor(state: iTreeState) {
-		console.log('EditMemberContainerForm.constructor');
 		super();
 		this.tid = 'editMemberContainerForm';
 		let member = <iMember>state.selectedNode;
@@ -24,7 +23,6 @@ export class EditMemberContainerForm extends GenericFormAction {
 		let li = button.parentElement;
 		let name = button.dataset['memberName'];
 		let objectValue = <iObjectValue>this.target;
-		console.log(objectValue);
 		objectValue.removeMember(name);
 		$(button).remove();
 		$(li).remove();

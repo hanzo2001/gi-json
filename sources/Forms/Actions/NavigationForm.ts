@@ -10,7 +10,6 @@ export class NavigationForm extends GenericFormAction {
 	protected isClosed: boolean = false;
 	constructor(state: iTreeState) {
 		super();
-		console.log('NavigationForm.constructor');
 		this.tid = 'navigationForm';
 		this.contextData = {};
 		this._build(state);
@@ -49,8 +48,11 @@ export class NavigationForm extends GenericFormAction {
 			let c = selected.first();
 			c && this.state.select(c);
 		} else {
-			let l = this.state.hash.getNode(<HTMLElement>selected.e.lastChild);
-			l && this.state.select(l);
+			let e = selected.e.lastChild;
+			if (e instanceof HTMLElement) {
+				let l = this.state.hash.getNode(e);
+				l && this.state.select(l);
+			}
 		}
 	}
 	protected goNext(event: JQueryEventObject) {

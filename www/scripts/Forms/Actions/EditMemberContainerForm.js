@@ -8,7 +8,6 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
     var EditMemberContainerForm = (function (_super) {
         __extends(EditMemberContainerForm, _super);
         function EditMemberContainerForm(state) {
-            console.log('EditMemberContainerForm.constructor');
             _super.call(this);
             this.tid = 'editMemberContainerForm';
             var member = state.selectedNode;
@@ -24,7 +23,6 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
             var li = button.parentElement;
             var name = button.dataset['memberName'];
             var objectValue = this.target;
-            console.log(objectValue);
             objectValue.removeMember(name);
             $(button).remove();
             $(li).remove();

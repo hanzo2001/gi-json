@@ -11,7 +11,6 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
             _super.call(this);
             this.tid = 'navigationForm';
             this.isClosed = false;
-            console.log('NavigationForm.constructor');
             this.tid = 'navigationForm';
             this.contextData = {};
             this._build(state);
@@ -57,8 +56,11 @@ define(["require", "exports", "jquery", "./GenericFormAction"], function (requir
                 c && this.state.select(c);
             }
             else {
-                var l = this.state.hash.getNode(selected.e.lastChild);
-                l && this.state.select(l);
+                var e = selected.e.lastChild;
+                if (e instanceof HTMLElement) {
+                    var l = this.state.hash.getNode(e);
+                    l && this.state.select(l);
+                }
             }
         };
         NavigationForm.prototype.goNext = function (event) {

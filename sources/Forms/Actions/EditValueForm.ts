@@ -5,11 +5,11 @@
 import {GenericFormAction} from "./GenericFormAction";
 import {valueTypes} from "../GenericTreeFormCommons";
 
-export class EditableValueForm extends GenericFormAction {
+export class EditValueForm extends GenericFormAction {
 	constructor(state: iTreeState) {
 		super();
 		let value = <iValue>state.selectedNode;
-		this.tid = 'editableValueForm';
+		this.tid = 'editValueForm';
 		this.contextData = {
 			value : value.getDisplayValue()
 		};

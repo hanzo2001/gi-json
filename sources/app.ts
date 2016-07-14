@@ -8,17 +8,16 @@ import {NodeHash} from "./NodeHash";
 import {NodeEngine} from "./NodeEngine";
 import {TreeState} from "./TreeState";
 import {KeyboardShortcutRegistry} from "./Forms/KeyboardShortcutRegistry";
+import {GenericTreeForm} from "./Forms/GenericTreeForm";
+import {GenericTreeFormFactory} from "./Forms/GenericTreeFormFactory";
 import {StartTreeForm} from "./Forms/Actions/StartTreeForm";
 import {AddItemForm} from "./Forms/Actions/AddItemForm";
 import {AddMemberForm} from "./Forms/Actions/AddMemberForm";
-import {EditItemContainerForm} from "./Forms/Actions/EditItemContainerForm";
-import {EditMemberContainerForm} from "./Forms/Actions/EditMemberContainerForm";
+import {EditItemForm} from "./Forms/Actions/EditItemForm";
 import {EditMemberForm} from "./Forms/Actions/EditMemberForm";
-import {EditableValueForm} from "./Forms/Actions/EditableValueForm";
+import {EditValueForm} from "./Forms/Actions/EditValueForm";
 import {SwitchTypeForm} from "./Forms/Actions/SwitchTypeForm";
 import {NavigationForm} from "./Forms/Actions/NavigationForm";
-import {GenericTreeForm} from "./Forms/GenericTreeForm";
-import {GenericTreeFormFactory} from "./Forms/GenericTreeFormFactory";
 
 import "helpers";
 
@@ -26,6 +25,7 @@ var state = new TreeState();
 
 $(function(){
 	try {
+		state.navigating = false;
 		state.hash = new NodeHash();
 		state.engine = NodeEngine;
 		state.treeBase = document.getElementById('treeBase');
@@ -34,7 +34,8 @@ $(function(){
 		state.kbsRegister = new KeyboardShortcutRegistry(document);
 		let rootElement = clearTextNodes(state.treeBase).childNodes.item(0);
 		if (rootElement) {
-			state.factory(<HTMLElement>rootElement);
+			let v = state.factory(<HTMLElement>rootElement);
+			state.setRoot(v);
 			state.navigate();
 		} else {
 			state.form = state.formFactory.create('startTreeForm');
@@ -55,50 +56,44 @@ $(function(){
 	}
 });
 
-function clickMember(event: JQueryEventObject) {
-	console.log('app.clickMember');
-	event.stopPropagation();
-	let memberElement: HTMLElement = this;
-	let state = <iTreeState>event.data;
-	try{
-	state.manipulate();
-	state.form = state.formFactory.create('editMemberContainerForm');
-	let member = <iMember>state.hash.getNode(memberElement);
-	state.select(member);
-	state.formControl = new EditMemberContainerForm(state);
-	}catch(e){console.log(e);}
-}
 function clickItem(event: JQueryEventObject) {
-	console.log('app.clickItem');
 	event.stopPropagation();
 	let itemElement: HTMLElement = this;
 	let state = <iTreeState>event.data;
-	state.manipulate();
-	state.form = state.formFactory.create('editItemContainerForm');
 	let item = <iItem>state.hash.getNode(itemElement);
+	state.manipulate();
 	state.select(item);
-	state.formControl = new EditItemContainerForm(state);
+	state.form = state.formFactory.create('editItemForm');
+	state.formControl = new EditItemForm(state);
+}
+function clickMember(event: JQueryEventObject) {
+	event.stopPropagation();
+	let memberElement: HTMLElement = this;
+	let state = <iTreeState>event.data;
+	let member = <iMember>state.hash.getNode(memberElement);
+	state.manipulate();
+	state.select(member);
+	state.form = state.formFactory.create('editMemberForm');
+	state.formControl = new EditMemberForm(state);
 }
 function clickName(event: JQueryEventObject) {
-	console.log('app.clickName');
 	event.stopPropagation();
 	let nameElement: HTMLElement = this;
 	let memberElement: HTMLElement = nameElement.parentElement;
 	let state = <iTreeState>event.data;
-	state.manipulate();
-	state.form = state.formFactory.create('editMemberForm');
 	let member = <iMember>state.hash.getNode(memberElement);
+	state.manipulate();
 	state.select(member);
+	state.form = state.formFactory.create('editMemberForm');
 	state.formControl = new EditMemberForm(state);
 }
 function clickValue(event: JQueryEventObject) {
-	console.log('app.clickValue');
 	event.stopPropagation();
 	let valueElement: HTMLElement = this;
 	let state = <iTreeState>event.data;
-	state.manipulate();
 	let value = <iValue>state.hash.getNode(valueElement);
 	let type: ValueType = value.type;
+	state.manipulate();
 	state.select(value);
 	switch (type) {
 		case 'u':
@@ -110,12 +105,12 @@ function clickValue(event: JQueryEventObject) {
 			state.navigate();
 			break;
 		case 's':
-			state.form = state.formFactory.create('editableValueForm');
-			state.formControl = new EditableValueForm(state);
+			state.form = state.formFactory.create('editValueForm');
+			state.formControl = new EditValueForm(state);
 			break;
 		case 'n':
-			state.form = state.formFactory.create('editableValueForm');
-			state.formControl = new EditableValueForm(state);
+			state.form = state.formFactory.create('editValueForm');
+			state.formControl = new EditValueForm(state);
 			break;
 		case 'o':
 			state.form = state.formFactory.create('addMemberForm');
