@@ -1,10 +1,8 @@
-///<reference path="../../../typings/index.d.ts" />
 ///<reference path="../../typings/index.d.ts" />
 
 import * as $ from "jquery";
-import * as Handlebars from "handlebars";
 import {GenericFormAction} from "./GenericFormAction";
-import {NodeEngine} from "../../NodeEngine";
+import {NodeEngine} from "../../Nodes/NodeEngine";
 
 export class NavigationForm extends GenericFormAction {
 	protected tid = 'navigationForm';

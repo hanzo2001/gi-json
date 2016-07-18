@@ -1,4 +1,4 @@
-///<reference path="../typings/iKeyboardShortcutRegistry.d.ts" />
+///<reference path="../typings/index.d.ts" />
 
 import * as $ from 'jquery';
 

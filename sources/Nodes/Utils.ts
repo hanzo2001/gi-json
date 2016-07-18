@@ -1,4 +1,4 @@
-///<reference path="./typings/iNodeEngineUtils.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 export var isFloatRE = /^-?(0|[1-9]\d*)(((\.\d+)|([eE]-?\d+))|(\.\d+[eE]-?\d+))$/;
 export var isIntRE   = /^-?(0|[1-9]\d*)$/;

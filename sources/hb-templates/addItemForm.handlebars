@@ -1,0 +1,8 @@
+<div data-apply-behavior="blockClicks">
+	<h3>Add Item</h3>
+	<select name="itemType">{{{selectOptions types selectedType dflt}}}</select>
+	<input  name="itemAmount" value="1" placeholder="How many?" />
+	<input  name="itemOffset" value="{{lastIndex}}" placeholder="Before element" />
+	<button data-action="createItem" title="(Enter)" data-kbs="13">Create</button>
+	<button data-action="closeForm"  title="(Esc)"   data-kbs="27">Close</button>
+</div>

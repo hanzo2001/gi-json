@@ -1,4 +1,4 @@
-///<reference path="../typings/iGenericTreeFormCommons.d.ts" />
+///<reference path="../typings/index.d.ts" />
 
 var no = function(): Object {return Object.create(null);}
 var ex = function(b: Object, o: Object): any {for (let i in o) {b[i]=o[i];} return b;}

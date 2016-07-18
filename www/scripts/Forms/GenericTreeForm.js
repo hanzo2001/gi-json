@@ -4,7 +4,7 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
         function GenericTreeForm(id, formBase) {
             this._tid = id;
             this._formBase = formBase;
-            this._script = Handlebars.compile($('#' + id).html());
+            this._script = Handlebars.templates[id];
             this._loaded = false;
         }
         GenericTreeForm.prototype.id = function () {

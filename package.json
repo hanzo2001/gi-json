@@ -3,7 +3,9 @@
 	"version": "1.0.0",
 	"description": "Graphically Interfaced JSON. Look and manipulate your JSON through a GUI.",
 	"main": "www/scripts/app.js",
-	"scripts": {},
+	"scripts": {
+		"refreshTpl": "handlebars sources/hb-templates -f www/scripts/hb-precompiled.js -a -m -k each -k selectOptions -o"
+	},
 	"keywords": [
 		"learning", "small-project", "typescript"
 	],

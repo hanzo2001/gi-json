@@ -1,0 +1,9 @@
+<div data-apply-behavior="blockClicks">
+	<h3>Remove Members</h3>
+	<ul>
+	{{#each members as |m|}}
+		<li><button data-action="removeMember" data-member-name="{{m}}">{{m}}</button></li>
+	{{/each}}
+	</ul>
+	<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+</div>

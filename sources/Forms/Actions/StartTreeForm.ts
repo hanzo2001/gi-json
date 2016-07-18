@@ -1,6 +1,4 @@
-///<reference path="../../typings/iKeyboardShortcutRegistry.d.ts" />
-///<reference path="../../typings/iNodeEngine.d.ts" />
-///<reference path="../../typings/iGenericTreeForm.d.ts" />
+///<reference path="../../typings/index.d.ts" />
 
 import {GenericFormAction} from "./GenericFormAction";
 import {complexTypes} from "../GenericTreeFormCommons";
@@ -20,8 +18,8 @@ export class StartTreeForm extends GenericFormAction {
 	}
 	protected createRoot(event: JQueryEventObject) {
 		let type = <ValueType>this.formRoot.find('select[name=rootType]').val();
-		let value = this.state.factory(type);
-		this.state.setRoot(value);
+		//let value = this.state.factory(type);
+		this.state.setRoot(type);
 		this._close();
 	}
 }

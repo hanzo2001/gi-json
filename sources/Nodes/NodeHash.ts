@@ -1,4 +1,4 @@
-///<reference path="./typings/iNodeHash.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 export class NodeHash implements iNodeHash {
 	private i: number = 0;

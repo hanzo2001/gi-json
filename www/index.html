@@ -2,17 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Nodes</title>
+		<title>GI Json</title>
 		<style type="text/css"></style>
-		<link rel="stylesheet" type="text/css" href="./style.css" />
-		<script src="./scripts/lib/require.js" data-main="scripts/config"></script>
-		<!--
-		<script>$(function(){var done;});</script>
-		-->
+		<link rel="stylesheet" type="text/css" href="./tree.css" />
+		<link rel="stylesheet" type="text/css" href="./tab.css" />
+		<script src="./scripts/lib/require-2.2.0.js" data-main="scripts/config"></script>
 	</head>
 	<body>
-		<div id="treeBase2"></div>
-		<!-- -->
+		<div id="tabWindow"></div>
+		<!-- --
 		<div id="treeBase">
 			<value data-t="o">
 				<member><name>null</name><value data-t="u">&nbsp;</value></member>
@@ -35,12 +33,13 @@
 				</value></member>
 			</value>
 		</div>
-		<!-- -->
+		!-- --
 		<div id="formBase"></div>
 		<div>
 			<button id="outputJSON">Output JSON</button>
 			<pre id="jsonOutput"></pre>
 		</div>
+		!-- -->
 		<!-- **************** -->
 		<!-- START HANDLEBARS -->
 		<!-- **************** -->
@@ -123,7 +122,6 @@
 				<h3>Start Tree</h3>
 				<select name="rootType">{{{selectOptions types selectedType dflt}}}</select>
 				<button data-action="createRoot" title="(Enter)" data-kbs="13">Create</button>
-				<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
 			</div>
 		</script>
 		<script type="text/x-handlebars-template" id="navigationForm">
@@ -142,6 +140,21 @@
 					</tr>
 				</table>
 			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="tabStructure">
+			<div class="tabContainer" data-action="selectTab" data-tab-id="{{tabId}}">
+				<div class="tabHead">
+					<h3 class="tabTitle">{{title}}</h3>
+					<button data-action="closeTab">&times;</button>
+				</div>
+				<div class="tabBody" data-action="startTree"></div>
+			</div>
+		</script>
+		<script type="text/x-handlebars-template" id="tabHeadTpl">
+			<div class="tabHead" data-tab-id="{{tabName}}"><span>{{tabName}}</span>&nbsp;<button data-action="removeTab">&times;</button></div>
+		</script>
+		<script type="text/x-handlebars-template" id="tabContainerTpl">
+			<div class="tab" data-tab-id="{{tabName}}"></div>
 		</script>
 	</body>
 </html>

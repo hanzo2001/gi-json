@@ -1,4 +1,4 @@
-///<reference path="../typings/iGenericTreeForm.d.ts" />
+///<reference path="../typings/index.d.ts" />
 
 import * as $ from "jquery";
 import * as Handlebars from "handlebars";
@@ -12,7 +12,8 @@ export class GenericTreeForm implements iGenericTreeForm {
 	constructor(id: string, formBase: HTMLElement) {
 		this._tid = id;
 		this._formBase = formBase;
-		this._script = Handlebars.compile($('#'+id).html());
+		this._script = Handlebars.templates[id];
+		//this._script = Handlebars.compile($('#'+id).html());
 		this._loaded = false;
 	}
 	id(): string {

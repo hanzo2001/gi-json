@@ -12,6 +12,9 @@ Graphically Interfaced JSON
 - [x] **Done** deletion operation should maneuver to parent node as last resort
 - [x] **Fixed** fix edit member
 - [x] **Discarded** consider fusing create member with edit member container
-- [ ] create tab feature
+- [x] **Done** create tab feature
+- [ ] fix keyboard shortcuts with tab integration
+- [x] **Done** deliver precompiled templates
 - [ ] setup backend communication
 - [ ] collapse complex value feature
+- [ ] minify and optimize app loading with r.js

@@ -1,6 +1,4 @@
-///<reference path="../../typings/iKeyboardShortcutRegistry.d.ts" />
-///<reference path="../../typings/iNodeEngine.d.ts" />
-///<reference path="../../typings/iGenericTreeForm.d.ts" />
+///<reference path="../../typings/index.d.ts" />
 
 import {GenericFormAction} from "./GenericFormAction";
 import {valueTypes} from "../GenericTreeFormCommons";

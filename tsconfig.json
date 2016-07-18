@@ -10,6 +10,7 @@
 	},
 	"files": [
 		"./sources/config.ts",
+		"./sources/hb-helpers.ts",
 		"./sources/app.ts"
 	]
 }

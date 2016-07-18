@@ -1,6 +1,4 @@
-///<reference path="../../typings/iKeyboardShortcutRegistry.d.ts" />
-///<reference path="../../typings/iNodeEngine.d.ts" />
-///<reference path="../../typings/iGenericTreeForm.d.ts" />
+///<reference path="../../typings/index.d.ts" />
 
 import * as $ from "jquery";
 import {GenericFormAction} from "./GenericFormAction";

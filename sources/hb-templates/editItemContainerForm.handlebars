@@ -1,0 +1,7 @@
+<div data-apply-behavior="blockClicks">
+	<h3>Remove Items</h3>
+	<ol start="0">{{#each items as |type|}}<li>
+		<button data-action="removeItem">{{type}}</button>
+	</li>{{/each}}</ol>
+	<button data-action="closeForm" title="(Esc)" data-kbs="27">Close</button>
+</div>
