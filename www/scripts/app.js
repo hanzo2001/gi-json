@@ -37,7 +37,7 @@ define(["require", "exports", "jquery", "handlebars", "./Utils/HistoryList", "./
     });
     function StartState(e) {
         var o = e.data;
-        var title = window.prompt('Tab Title:', 'tab' + o.utid());
+        var title = 'tab' + o.utid();
         if (!title) {
             return;
         }

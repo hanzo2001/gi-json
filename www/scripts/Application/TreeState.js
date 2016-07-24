@@ -49,6 +49,7 @@ define(["require", "exports", "./ElementClickEvents", "../Forms/GenericTreeForm"
             this.focus();
             this.outputElement = this.root.appendChild(document.createElement('button'));
             this.outputElement.innerHTML = 'Output JSON';
+            $(this.tab.head).dblclick(function (e) { return (_this.renameTab()); });
             $(this.outputElement).click(function (e) { return (_this.rootValue && _this.serialize(_this.rootValue.toString(), _this.tab.getTitle())); });
         }
         TreeState.prototype.teardown = function () {
@@ -135,6 +136,14 @@ define(["require", "exports", "./ElementClickEvents", "../Forms/GenericTreeForm"
         };
         TreeState.prototype.getNode = function (e) {
             return this.engine.getNode(e);
+        };
+        TreeState.prototype.renameTab = function () {
+            var _this = this;
+            var title = this.tab.getTitle();
+            var events = this.kbsRegister.clear();
+            title = window.prompt('Rename tab', title);
+            this.tab.renameTab(title);
+            setTimeout(function () { return _this.kbsRegister.unclear(events); }, 300);
         };
         return TreeState;
     }());

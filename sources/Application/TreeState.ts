@@ -77,6 +77,9 @@ export class TreeState implements iTreeState {
 		// setup output
 		this.outputElement = <HTMLElement>this.root.appendChild(document.createElement('button'));
 		this.outputElement.innerHTML = 'Output JSON';
+		$(this.tab.head).dblclick((e)=>(
+			this.renameTab()
+		));
 		$(this.outputElement).click((e)=>(
 			this.rootValue && this.serialize(this.rootValue.toString(),this.tab.getTitle())
 		));
@@ -165,5 +168,12 @@ export class TreeState implements iTreeState {
 	}
 	getNode(e: HTMLElement): iProtoBase {
 		return this.engine.getNode(e);
+	}
+	renameTab() {
+		let title = this.tab.getTitle();
+		let events = this.kbsRegister.clear();
+		title = window.prompt('Rename tab',title);
+		this.tab.renameTab(title);
+		setTimeout(()=>this.kbsRegister.unclear(events),300);
 	}
 }

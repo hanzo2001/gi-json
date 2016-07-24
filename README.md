@@ -13,10 +13,12 @@ Graphically Interfaced JSON
 - [x] **Fixed** fix edit member
 - [x] **Discarded** consider fusing create member with edit member container
 - [x] **Done** create tab feature
-- [x] **Fixed0** fix keyboard shortcuts with tab integration
+- [x] **Fixed** fix keyboard shortcuts with tab integration
 - [x] **Done** deliver precompiled templates
-- [ ] Add keyboard shortcut for delete during navigation
-- [ ] Add json loader
+- [x] **Done** add rename tabs (not well implemented: `window.prompt` with a timeout)
+- [ ] _[optional]_ include rename form with highlightbox that blocks everything
+- [ ] add keyboard shortcut for delete (46) during navigation
+- [ ] add json loader
 - [ ] setup backend communication
 - [ ] collapse complex value feature
 - [ ] minify and optimize app loading with r.js

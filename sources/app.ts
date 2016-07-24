@@ -64,7 +64,7 @@ interface iApplicationConfig {
 
 function StartState(e: JQueryEventObject) {
 	let o = <iApplicationConfig>e.data;
-	let title = window.prompt('Tab Title:','tab'+o.utid());
+	let title = 'tab'+o.utid();
 	if (!title) {return;}
 	let tab = o.tabFactory.create(title);
 	o.tabSpace.addTab(tab);
