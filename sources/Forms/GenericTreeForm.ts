@@ -13,7 +13,6 @@ export class GenericTreeForm implements iGenericTreeForm {
 		this._tid = id;
 		this._formBase = formBase;
 		this._script = Handlebars.templates[id];
-		//this._script = Handlebars.compile($('#'+id).html());
 		this._loaded = false;
 	}
 	id(): string {
@@ -33,6 +32,7 @@ export class GenericTreeForm implements iGenericTreeForm {
 		if (this._loaded) {
 			this._form.remove();
 			this._loaded = false;
+			this._form = null;
 		}
 	}
 }

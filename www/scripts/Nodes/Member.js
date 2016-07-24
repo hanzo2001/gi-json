@@ -32,11 +32,11 @@ define(["require", "exports", "./ValueContainer", "./Utils", "./MemberName"], fu
             var e;
             if (input instanceof HTMLElement) {
                 e = _super.prototype._init.call(this, h, input);
-                this.v = this.f.createValue(e.lastChild);
+                this.v = this.f.create(this._h, e.lastChild);
             }
             else {
                 e = _super.prototype._init.call(this, h, 'member');
-                this.v = this.f.createValue(input);
+                this.v = this.f.create(this._h, input);
                 this._append(this.v);
             }
             return e;

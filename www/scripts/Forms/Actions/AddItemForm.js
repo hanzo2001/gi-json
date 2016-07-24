@@ -9,7 +9,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         __extends(AddItemForm, _super);
         function AddItemForm(state) {
             _super.call(this);
-            var arrayValue = state.selectedNode;
+            var arrayValue = state.selectedNode();
             this.tid = 'addItemForm';
             this.contextData = {
                 types: GenericTreeFormCommons_1.valueTypes,

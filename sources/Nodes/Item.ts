@@ -3,7 +3,7 @@
 import {ValueContainer} from "./ValueContainer";
 
 export class Item extends ValueContainer implements iItem {
-	constructor(h: iNodeHash, input: HTMLElement|ValueType, f: iNodeEngine) {
+	constructor(h: iNodeHash, input: HTMLElement|ValueType, f: iNodeFactory) {
 		super();
 		this.f = f;
 		this._init(h,input);
@@ -18,10 +18,10 @@ export class Item extends ValueContainer implements iItem {
 		let e: HTMLElement;
 		if (input instanceof HTMLElement) {
 			e = super._init(h,input);
-			this.v = this.f.createValue(<HTMLElement>e.firstChild);
+			this.v = this.f.create(this._h,<HTMLElement>e.firstChild);
 		} else {
 			e = super._init(h,'item');
-			this.v = this.f.createValue(input);
+			this.v = this.f.create(this._h,input);
 			this._append(this.v);
 		}
 		return e;

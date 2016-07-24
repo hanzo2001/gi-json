@@ -10,7 +10,7 @@ export class GenericTreeFormFactory implements iGenericTreeFormFactory {
 		this.base = base;
 	}
 	create(id: string): iGenericTreeForm {
-		let form: iGenericTreeForm = this.cache[id];
+		let form = this.cache[id];
 		if (!form) {
 			form = this.cache[id] = new GenericTreeForm(id,this.base);
 		}

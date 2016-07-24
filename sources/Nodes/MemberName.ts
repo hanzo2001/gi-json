@@ -4,7 +4,6 @@ import {ProtoBase} from "./ProtoBase";
 import {ElementParser} from "./Utils";
 
 export class MemberName extends ProtoBase implements iMemberName {
-	e: HTMLElement;
 	name: string;
 	constructor(h: iNodeHash, input: HTMLElement|string) {
 		super();

@@ -1,12 +1,11 @@
-/*
-#tabWindow {
-	border:1px solid black;
+#WorkSpace {
+	box-shadow:-1pt 2pt 2pt gray;
+	border-radius:4pt;
 }
-*/
 .tabHeader {
-	/*background:#9bf;*/
-	border-radius:2pt 2pt 0 0;
 	padding-left:6pt;
+	background: #9bf;
+	border-radius:4pt 4pt 0 0;
 }
 .tabHeader > button {
 	display:inline-block;
@@ -21,18 +20,17 @@
 }
 .tabHead {
 	display: inline-block;
-	background:#bdf;
+	background:#bfdfff;
 	padding:0;
 	margin-left:3pt;
 }
 .tabHead > span {
-	display:block;
+	display:inline-block;
 	font:bold 12pt arial;
-	padding:3pt 4pt 3pt 8pt;
-	float:left;
+	padding:3pt 4pt;
 }
 .tabHead > button {
-	display:block;
+	display:inline-block;
 	background:#69c;
 	background:#58b;
 	width:18pt;
@@ -40,7 +38,6 @@
 	border:0;
 	padding:3pt;
 	margin:0;
-	float:right;
 	cursor:pointer;
 }
 .tabHead.hidden {
@@ -51,16 +48,10 @@
 	cursor:pointer;
 }
 .tabContainer {
-	border:3px solid #bdf;
-	box-shadow:-1pt 2pt 2pt gray;
+	border:3px solid #bfdfff;
 	border-radius:0 0 4pt 4pt;
 	padding: 3pt;
 }
-/*
-.tab {
-	min-height:50px;
-}
-*/
 .tab.hidden {
 	display:none;
 }

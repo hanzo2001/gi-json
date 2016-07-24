@@ -2,13 +2,24 @@
 
 import {ProtoBase} from "../ProtoBase";
 
-export class Value extends ProtoBase implements iValue {
-	e: HTMLElement;
+export abstract class Value extends ProtoBase implements iValue {
 	type: ValueType;
 	value: ValueContent;
+	isNotRoot(): boolean {
+		let tag = this.e.parentElement ? this.e.parentElement.tagName : null;
+		return tag === 'ITEM' || tag === 'MEMBER';
+	}
 	getParentContainer(): iValueContainer {
-		let parentTag = this.e.parentElement.tagName;
-		return parentTag === 'ITEM' || parentTag === 'MEMBER' ? <iValueContainer>this.getParent() : null;
+		return this.isNotRoot() ? <iValueContainer>super.parent() : null;
+	}
+	parent(): iValueContainer {
+		return this.isNotRoot() ? <iValueContainer>super.parent() : null;
+	}
+	prev(): iValue {
+		return this._getSibling(false);
+	}
+	next(): iValue {
+		return this._getSibling(true);
 	}
 	isEmpty(): boolean {
 		return this.e.innerHTML === '&nbsp;';
@@ -29,6 +40,17 @@ export class Value extends ProtoBase implements iValue {
 	resetValue() {
 		this._defaultValue(this.e);
 		return this.e;
+	}
+	protected _getSibling(next: boolean) {
+		// get container element
+		let container = <HTMLElement>this.e.parentElement || null;
+		if (!this.isNotRoot()) {return null;}
+		// get sibling element
+		let sibling = <HTMLElement>container[next?'nextSibling':'previousSibling'] || null;
+		if (!sibling) {return null;}
+		// get sibling value
+		let value = <HTMLElement>sibling.lastChild || null;
+		return value ? <iValue>this._h.get(value) : null;
 	}
 	protected _init(h: iNodeHash, input: HTMLElement|string): HTMLElement {
 		let e: HTMLElement;

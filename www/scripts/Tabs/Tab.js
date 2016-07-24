@@ -1,49 +1,32 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "jquery"], function (require, exports, $) {
     "use strict";
     var Tab = (function () {
-        function Tab(head, body) {
-            this.hid = null;
+        function Tab(id, head, title, button, body) {
+            this.id = id;
             this.head = head;
             this.body = body;
-            this.active = false;
+            this.title = title;
+            this.button = button;
         }
-        Tab.prototype.clickSelect = function (fn) {
-            this.head.find('span').click(this, function (e) {
-                var tab = e.data;
-                if (!tab.active) {
-                    var selected = fn(e);
-                    selected && selected.deselect();
-                    tab.select();
-                }
-            });
+        Tab.prototype.renameTab = function (title) {
+            this.title.innerHTML = title;
         };
-        Tab.prototype.clickClose = function (fn) {
-            this.head.find('button').click(this, function (e) {
-                var tab = e.data;
-                var nextTab = fn(e);
-                nextTab && nextTab.select();
-                tab && tab.remove();
-            });
+        Tab.prototype.blurTab = function () {
+            $(this.head).addClass('hidden');
+            $(this.body).addClass('hidden');
         };
-        Tab.prototype.remove = function () {
-            if (this.head) {
-                this.head.remove();
-                this.body.remove();
-                this.head = this.body = null;
-            }
-            this.active = false;
+        Tab.prototype.focusTab = function () {
+            $(this.head).removeClass('hidden');
+            $(this.body).removeClass('hidden');
         };
-        Tab.prototype.select = function () {
-            if (this.head) {
-                this.head.removeClass('hidden');
-                this.body.removeClass('hidden');
-            }
-            this.active = true;
+        Tab.prototype.closeTab = function () {
+            $(this.head).remove();
+            $(this.body).remove();
+            this.head = this.body = this.title = this.button = null;
+            this.state = null;
         };
-        Tab.prototype.deselect = function () {
-            this.head.addClass('hidden');
-            this.body.addClass('hidden');
-            this.active = false;
+        Tab.prototype.getTitle = function () {
+            return this.title.innerHTML;
         };
         return Tab;
     }());

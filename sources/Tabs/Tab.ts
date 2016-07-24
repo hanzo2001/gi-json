@@ -1,52 +1,39 @@
-///<reference path="../typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
+
+import * as $ from "jquery";
 
 export class Tab implements iTab {
-	hid: number = null;
-	head: JQuery;
-	body: JQuery;
-	active: boolean;
+	id: number;
+	head: HTMLElement;
+	body: HTMLElement;
+	title: HTMLElement;
+	button: HTMLElement;
 	state: iTreeState;
-	constructor(head: JQuery, body: JQuery) {
+	constructor(id: number, head: HTMLElement, title: HTMLElement, button: HTMLElement, body: HTMLElement) {
+		this.id = id;
 		this.head = head;
 		this.body = body;
-		this.active = false;
+		this.title = title;
+		this.button = button;
 	}
-	clickSelect(fn: (e: JQueryEventObject)=>iTab) {
-		this.head.find('span').click(this,function(e){
-			var tab = e.data;
-			if (!tab.active) {
-				var selected = fn(e);
-				selected && selected.deselect();
-				tab.select();
-			}
-		});
+	renameTab(title: string) {
+		this.title.innerHTML = title;
 	}
-	clickClose(fn: (e: JQueryEventObject)=>iTab) {
-		this.head.find('button').click(this,function(e){
-			var tab = e.data;
-			var nextTab = fn(e);
-			nextTab && nextTab.select();
-			tab && tab.remove();
-		});
+	blurTab() {
+		$(this.head).addClass('hidden');
+		$(this.body).addClass('hidden');
 	}
-	remove() {
-		if (this.head) {
-			this.head.remove();
-			this.body.remove();
-			this.head = this.body = null;
-		}
-		this.active = false;
+	focusTab() {
+		$(this.head).removeClass('hidden');
+		$(this.body).removeClass('hidden');
 	}
-	select() {
-		if (this.head) {
-			this.head.removeClass('hidden');
-			this.body.removeClass('hidden');
-		}
-		this.active = true;
+	closeTab() {
+		$(this.head).remove();
+		$(this.body).remove();
+		this.head = this.body = this.title = this.button = null;
+		this.state = null;
 	}
-	deselect() {
-		this.head.addClass('hidden');
-		this.body.addClass('hidden');
-		this.active = false;
+	getTitle(): string {
+		return this.title.innerHTML;
 	}
 }

@@ -9,7 +9,7 @@ define(["require", "exports", "./GenericFormAction"], function (require, exports
         __extends(EditValueForm, _super);
         function EditValueForm(state) {
             _super.call(this);
-            var value = state.selectedNode;
+            var value = state.selectedNode();
             this.tid = 'editValueForm';
             this.contextData = {
                 value: value.getValue()

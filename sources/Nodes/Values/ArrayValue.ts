@@ -1,25 +1,17 @@
 /// <reference path="../../typings/index.d.ts" />
 
-import {Value} from "./Value";
+import {ComplexValue} from "./ComplexValue";
 import {ElementParser,clearTextNodes} from "../Utils";
 import {Item} from "../Item";
 
-export class ArrayValue extends Value implements iArrayValue {
-	e: HTMLElement;
-	type: ValueType;
-	value: ValueContent;
+export class ArrayValue extends ComplexValue implements iArrayValue {
 	items: iItem[];
-	s: number;
-	f: iNodeEngine;
-	constructor(h: iNodeHash, e: HTMLElement, f: iNodeEngine) {
+	constructor(h: iNodeHash, e: HTMLElement, f: iNodeFactory) {
 		super();
 		this.items = [];
 		this.s = 0;
 		this.f = f;
 		this._init(h,e||'a');
-	}
-	isComplex(): boolean {
-		return true;
 	}
 	getItem(index: number): iItem {
 		return this.items[index] || null;
@@ -65,7 +57,7 @@ export class ArrayValue extends Value implements iArrayValue {
 	removeItem(index: number) {
 		let item: iItem = this.items[index];
 		if (item) {
-			item._remove(true);
+			item.remove(true);
 			this.items.splice(index,1);
 			this.s--;
 			if (!this.s) {this._defaultValue(this.e);}
@@ -73,7 +65,7 @@ export class ArrayValue extends Value implements iArrayValue {
 	}
 	empty() {
 		let i: number = this.s;
-		while (i--) {this.e.removeChild(this.items[i]._remove(true));}
+		while (i--) {this.e.removeChild(this.items[i].remove(true));}
 		this.s = 0;
 		this.items = [];
 		this._defaultValue(this.e);
@@ -86,8 +78,8 @@ export class ArrayValue extends Value implements iArrayValue {
 	}
 	_remove(unlink: boolean) {
 		let i: number = this.s;
-		while (i--) {this.items[i]._remove(unlink);}
-		return super._remove(unlink);
+		while (i--) {this.items[i].remove(unlink);}
+		return super.remove(unlink);
 	}
 	toString() {
 		let r='', i=0;

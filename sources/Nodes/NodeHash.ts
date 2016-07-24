@@ -7,7 +7,7 @@ export class NodeHash implements iNodeHash {
 		let id: number = ~~e.dataset['nid'] || 0;
 		return id && !!this.h[id];
 	}
-	getNode(e: HTMLElement): iValue {
+	get(e: HTMLElement): iValue {
 		let id: number = ~~e.dataset['nid'];
 		return this.h[id] || null;
 	}

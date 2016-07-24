@@ -1,17 +1,16 @@
 /// <reference path="../typings/index.d.ts" />
 
-export class ProtoBase implements iProtoBase {
+export abstract class ProtoBase implements iProtoBase {
 	e: HTMLElement;
 	id: number;
 	protected _h: iNodeHash;
-	getParent(): iProtoBase {
-		let parent: iProtoBase = <iProtoBase>this._h.getNode(this.e.parentElement);
-		return parent;
+	parent(): iProtoBase {
+		return this._h.get(this.e.parentElement);
 	}
 	getNodeId(): number {
 		return this.id;
 	}
-	_remove(unlink: boolean): HTMLElement {
+	remove(unlink: boolean): HTMLElement {
 		let e: HTMLElement = this.e;
 		this.e = null;
 		if (unlink) {

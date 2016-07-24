@@ -9,7 +9,7 @@ define(["require", "exports"], function (require, exports) {
             var id = ~~e.dataset['nid'] || 0;
             return id && !!this.h[id];
         };
-        NodeHash.prototype.getNode = function (e) {
+        NodeHash.prototype.get = function (e) {
             var id = ~~e.dataset['nid'];
             return this.h[id] || null;
         };

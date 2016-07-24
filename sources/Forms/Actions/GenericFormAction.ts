@@ -8,15 +8,15 @@ export abstract class GenericFormAction implements iGenericFormAction {
 	protected form: iGenericTreeForm;
 	protected formRoot: JQuery;
 	protected target: NodeEngineTarget;
-	protected kbsManager: iKeyboardShortcutRegistry;
+	protected kbsRegister: iKbsRegistry;
 	protected tid: string;
 	protected _build(state: iTreeState) {
 		this.state = state;
 		this.form = state.form;
 		this.form.show(this.contextData);
 		this.formRoot = this.form.get();
-		this.target = <NodeEngineTarget>state.selectedNode;
-		this.kbsManager = state.kbsRegister;
+		this.target = <NodeEngineTarget>state.selectedNode();
+		this.kbsRegister = state.kbsRegister;
 		this.formRoot.find('[data-action]').each(this._attachButtonEvent.bind(this));
 	}
 	protected _attachButtonEvent(i: number, button: HTMLElement){
@@ -26,20 +26,18 @@ export abstract class GenericFormAction implements iGenericFormAction {
 		if (cb) {
 			cb = cb.bind(this);
 			$(button).click(cb);
-			if (kbs) {this.kbsManager.registerShortcut(kbs,cb);}
+			if (kbs) {this.kbsRegister.register(kbs,cb);}
 		}
 	}
 	protected _close() {
-		this.kbsManager && this.kbsManager.unregisterShortcut();
 		this.form && this.form.remove();
 		this.contextData = null;
 		this.form = null;
 		this.formRoot = null;
 		this.target = null;
-		this.kbsManager = null;
-		this.state.form = null;
-		this.state.formControl = null;
-		if (!this.state.navigating) {this.state.navigate();}
+		this.kbsRegister = null;
+		this.state && this.state.navigate();
+		this.state = null;
 	}
 	closeForm() {
 		this._close();

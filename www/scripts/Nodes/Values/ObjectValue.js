@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./Value", "../Utils", "../Member"], function (require, exports, Value_1, Utils_1, Member_1) {
+define(["require", "exports", "./ComplexValue", "../Utils", "../Member"], function (require, exports, ComplexValue_1, Utils_1, Member_1) {
     "use strict";
     var ObjectValue = (function (_super) {
         __extends(ObjectValue, _super);
@@ -14,9 +14,6 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
             this.f = f;
             this._init(h, e || 'o');
         }
-        ObjectValue.prototype.isComplex = function () {
-            return true;
-        };
         ObjectValue.prototype.getMember = function (name) {
             return this.members[name] || null;
         };
@@ -47,7 +44,7 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
         ObjectValue.prototype.removeMember = function (name) {
             var member = this.members[name];
             if (member) {
-                var e = member._remove(true);
+                var e = member.remove(true);
                 delete this.members[name];
                 this.s--;
                 if (!this.s) {
@@ -66,7 +63,7 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
         ObjectValue.prototype.empty = function () {
             var i;
             for (i in this.members) {
-                this.members[i]._remove(true);
+                this.members[i].remove(true);
                 delete this.members[i];
             }
             this.s = 0;
@@ -74,12 +71,12 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
         };
         ObjectValue.prototype.first = function () {
             var e = this.e.firstElementChild;
-            var c = e ? this._h.getNode(e) : null;
+            var c = e ? this._h.get(e) : null;
             return c || null;
         };
         ObjectValue.prototype.last = function () {
             var e = this.e.lastElementChild;
-            var c = e ? this._h.getNode(e) : null;
+            var c = e ? this._h.get(e) : null;
             return c || null;
         };
         ObjectValue.prototype.toString = function () {
@@ -94,10 +91,10 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
         ObjectValue.prototype._remove = function (unlink) {
             var i;
             for (i in this.members) {
-                this.members[i]._remove(unlink);
+                this.members[i].remove(unlink);
                 delete this.members[i];
             }
-            return _super.prototype._remove.call(this, unlink);
+            return _super.prototype.remove.call(this, unlink);
         };
         ObjectValue.prototype._extractValue = function (objectElement) {
             Utils_1.clearTextNodes(objectElement);
@@ -111,6 +108,6 @@ define(["require", "exports", "./Value", "../Utils", "../Member"], function (req
             return null;
         };
         return ObjectValue;
-    }(Value_1.Value));
+    }(ComplexValue_1.ComplexValue));
     exports.ObjectValue = ObjectValue;
 });

@@ -24,11 +24,11 @@ define(["require", "exports", "./ValueContainer"], function (require, exports, V
             var e;
             if (input instanceof HTMLElement) {
                 e = _super.prototype._init.call(this, h, input);
-                this.v = this.f.createValue(e.firstChild);
+                this.v = this.f.create(this._h, e.firstChild);
             }
             else {
                 e = _super.prototype._init.call(this, h, 'item');
-                this.v = this.f.createValue(input);
+                this.v = this.f.create(this._h, input);
                 this._append(this.v);
             }
             return e;

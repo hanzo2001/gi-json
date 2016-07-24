@@ -8,8 +8,8 @@ define(["require", "exports", 'jquery'], function (require, exports, $) {
             this.form = state.form;
             this.form.show(this.contextData);
             this.formRoot = this.form.get();
-            this.target = state.selectedNode;
-            this.kbsManager = state.kbsRegister;
+            this.target = state.selectedNode();
+            this.kbsRegister = state.kbsRegister;
             this.formRoot.find('[data-action]').each(this._attachButtonEvent.bind(this));
         };
         GenericFormAction.prototype._attachButtonEvent = function (i, button) {
@@ -20,23 +20,19 @@ define(["require", "exports", 'jquery'], function (require, exports, $) {
                 cb = cb.bind(this);
                 $(button).click(cb);
                 if (kbs) {
-                    this.kbsManager.registerShortcut(kbs, cb);
+                    this.kbsRegister.register(kbs, cb);
                 }
             }
         };
         GenericFormAction.prototype._close = function () {
-            this.kbsManager && this.kbsManager.unregisterShortcut();
             this.form && this.form.remove();
             this.contextData = null;
             this.form = null;
             this.formRoot = null;
             this.target = null;
-            this.kbsManager = null;
-            this.state.form = null;
-            this.state.formControl = null;
-            if (!this.state.navigating) {
-                this.state.navigate();
-            }
+            this.kbsRegister = null;
+            this.state && this.state.navigate();
+            this.state = null;
         };
         GenericFormAction.prototype.closeForm = function () {
             this._close();

@@ -9,7 +9,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         __extends(SwitchTypeForm, _super);
         function SwitchTypeForm(state) {
             _super.call(this);
-            var value = state.selectedNode;
+            var value = state.selectedNode();
             this.tid = 'switchTypeForm';
             this.contextData = {
                 types: GenericTreeFormCommons_1.valueTypes,
@@ -21,12 +21,13 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         }
         SwitchTypeForm.prototype.updateValue = function (event) {
             var value = this.target;
-            var container = value.getParentContainer();
-            var oldType = value.getDisplayValue();
+            var container = value.parent();
+            var oldType = value.type;
             var newType = this.formRoot.find('select[name=valueType]').val();
             if (oldType !== newType) {
                 var newValue = container.setType(newType);
-                this.state.select(newValue);
+                this.state.navigator.clear();
+                this.state.navigator.select(newValue);
             }
             this._close();
         };

@@ -6,7 +6,7 @@ import {MemberName} from "./MemberName";
 
 export class Member extends ValueContainer implements iMember {
 	n: iMemberName;
-	constructor(h: iNodeHash, name: string, input: HTMLElement|ValueType, f: iNodeEngine) {
+	constructor(h: iNodeHash, name: string, input: HTMLElement|ValueType, f: iNodeFactory) {
 		super();
 		this.f = f;
 		let e: HTMLElement = this._init(h,input);
@@ -30,10 +30,10 @@ export class Member extends ValueContainer implements iMember {
 		let e: HTMLElement;
 		if (input instanceof HTMLElement) {
 			e = super._init(h,input);
-			this.v = this.f.createValue(<HTMLElement>e.lastChild);
+			this.v = this.f.create(this._h,<HTMLElement>e.lastChild);
 		} else {
 			e = super._init(h,'member');
-			this.v = this.f.createValue(input);
+			this.v = this.f.create(this._h,input);
 			this._append(this.v);
 		}
 		return e;

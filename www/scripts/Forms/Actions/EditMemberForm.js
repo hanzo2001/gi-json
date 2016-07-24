@@ -9,7 +9,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         __extends(EditMemberForm, _super);
         function EditMemberForm(state) {
             _super.call(this);
-            var member = state.selectedNode;
+            var member = state.selectedNode();
             this.tid = 'editMemberForm';
             this.contextData = {
                 name: member.getName(),
@@ -42,10 +42,10 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         EditMemberForm.prototype.deleteMember = function (event) {
             var member = this.target;
             var name = member.getName();
-            var objectValue = member.getParent();
+            var objectValue = member.parent();
             var next = member.next() || member.prev() || objectValue;
+            this.state.navigator.select(next);
             objectValue.removeMember(name);
-            this.state.select(next);
             this._close();
         };
         return EditMemberForm;

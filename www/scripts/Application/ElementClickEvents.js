@@ -4,10 +4,10 @@ define(["require", "exports", "../Forms/Actions/AddItemForm", "../Forms/Actions/
         event.stopPropagation();
         var itemElement = this;
         var state = event.data;
-        var item = state.hash.getNode(itemElement);
+        var item = state.getNode(itemElement);
         state.manipulate();
-        state.select(item);
-        state.form = state.formFactory.create('editItemForm');
+        state.navigator.select(item);
+        state.form = state.formFactory('editItemForm');
         state.formControl = new EditItemForm_1.EditItemForm(state);
     }
     exports.clickItem = clickItem;
@@ -15,10 +15,10 @@ define(["require", "exports", "../Forms/Actions/AddItemForm", "../Forms/Actions/
         event.stopPropagation();
         var memberElement = this;
         var state = event.data;
-        var member = state.hash.getNode(memberElement);
+        var member = state.getNode(memberElement);
         state.manipulate();
-        state.select(member);
-        state.form = state.formFactory.create('editMemberForm');
+        state.navigator.select(member);
+        state.form = state.formFactory('editMemberForm');
         state.formControl = new EditMemberForm_1.EditMemberForm(state);
     }
     exports.clickMember = clickMember;
@@ -27,10 +27,10 @@ define(["require", "exports", "../Forms/Actions/AddItemForm", "../Forms/Actions/
         var nameElement = this;
         var memberElement = nameElement.parentElement;
         var state = event.data;
-        var member = state.hash.getNode(memberElement);
+        var member = state.getNode(memberElement);
         state.manipulate();
-        state.select(member);
-        state.form = state.formFactory.create('editMemberForm');
+        state.navigator.select(member);
+        state.form = state.formFactory('editMemberForm');
         state.formControl = new EditMemberForm_1.EditMemberForm(state);
     }
     exports.clickName = clickName;
@@ -38,13 +38,13 @@ define(["require", "exports", "../Forms/Actions/AddItemForm", "../Forms/Actions/
         event.stopPropagation();
         var valueElement = this;
         var state = event.data;
-        var value = state.hash.getNode(valueElement);
+        var value = state.getNode(valueElement);
         var type = value.type;
         state.manipulate();
-        state.select(value);
+        state.navigator.select(value);
         switch (type) {
             case 'u':
-                state.form = state.formFactory.create('switchTypeForm');
+                state.form = state.formFactory('switchTypeForm');
                 state.formControl = new SwitchTypeForm_1.SwitchTypeForm(state);
                 break;
             case 'b':
@@ -52,19 +52,19 @@ define(["require", "exports", "../Forms/Actions/AddItemForm", "../Forms/Actions/
                 state.navigate();
                 break;
             case 's':
-                state.form = state.formFactory.create('editValueForm');
+                state.form = state.formFactory('editValueForm');
                 state.formControl = new EditValueForm_1.EditValueForm(state);
                 break;
             case 'n':
-                state.form = state.formFactory.create('editValueForm');
+                state.form = state.formFactory('editValueForm');
                 state.formControl = new EditValueForm_1.EditValueForm(state);
                 break;
             case 'o':
-                state.form = state.formFactory.create('addMemberForm');
+                state.form = state.formFactory('addMemberForm');
                 state.formControl = new AddMemberForm_1.AddMemberForm(state);
                 break;
             case 'a':
-                state.form = state.formFactory.create('addItemForm');
+                state.form = state.formFactory('addItemForm');
                 state.formControl = new AddItemForm_1.AddItemForm(state);
                 break;
         }

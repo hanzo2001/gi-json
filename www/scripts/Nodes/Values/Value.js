@@ -10,9 +10,21 @@ define(["require", "exports", "../ProtoBase"], function (require, exports, Proto
         function Value() {
             _super.apply(this, arguments);
         }
+        Value.prototype.isNotRoot = function () {
+            var tag = this.e.parentElement ? this.e.parentElement.tagName : null;
+            return tag === 'ITEM' || tag === 'MEMBER';
+        };
         Value.prototype.getParentContainer = function () {
-            var parentTag = this.e.parentElement.tagName;
-            return parentTag === 'ITEM' || parentTag === 'MEMBER' ? this.getParent() : null;
+            return this.isNotRoot() ? _super.prototype.parent.call(this) : null;
+        };
+        Value.prototype.parent = function () {
+            return this.isNotRoot() ? _super.prototype.parent.call(this) : null;
+        };
+        Value.prototype.prev = function () {
+            return this._getSibling(false);
+        };
+        Value.prototype.next = function () {
+            return this._getSibling(true);
         };
         Value.prototype.isEmpty = function () {
             return this.e.innerHTML === '&nbsp;';
@@ -33,6 +45,18 @@ define(["require", "exports", "../ProtoBase"], function (require, exports, Proto
         Value.prototype.resetValue = function () {
             this._defaultValue(this.e);
             return this.e;
+        };
+        Value.prototype._getSibling = function (next) {
+            var container = this.e.parentElement || null;
+            if (!this.isNotRoot()) {
+                return null;
+            }
+            var sibling = container[next ? 'nextSibling' : 'previousSibling'] || null;
+            if (!sibling) {
+                return null;
+            }
+            var value = sibling.lastChild || null;
+            return value ? this._h.get(value) : null;
         };
         Value.prototype._init = function (h, input) {
             var e;

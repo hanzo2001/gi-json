@@ -9,7 +9,7 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         __extends(EditItemForm, _super);
         function EditItemForm(state) {
             _super.call(this);
-            var item = state.selectedNode;
+            var item = state.selectedNode();
             this.tid = 'editItemForm';
             this.contextData = {
                 types: GenericTreeFormCommons_1.valueTypes,
@@ -31,11 +31,11 @@ define(["require", "exports", "./GenericFormAction", "../GenericTreeFormCommons"
         };
         EditItemForm.prototype.deleteItem = function (event) {
             var item = this.target;
-            var arrayValue = item.getParentValue();
+            var arrayValue = item.parent();
             var index = item.getIndex();
             var next = item.next() || item.prev() || arrayValue;
+            this.state.navigator.select(next);
             arrayValue.removeItem(index);
-            this.state.select(next);
             this._close();
         };
         return EditItemForm;

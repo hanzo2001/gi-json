@@ -3,14 +3,13 @@ define(["require", "exports"], function (require, exports) {
     var ProtoBase = (function () {
         function ProtoBase() {
         }
-        ProtoBase.prototype.getParent = function () {
-            var parent = this._h.getNode(this.e.parentElement);
-            return parent;
+        ProtoBase.prototype.parent = function () {
+            return this._h.get(this.e.parentElement);
         };
         ProtoBase.prototype.getNodeId = function () {
             return this.id;
         };
-        ProtoBase.prototype._remove = function (unlink) {
+        ProtoBase.prototype.remove = function (unlink) {
             var e = this.e;
             this.e = null;
             if (unlink) {

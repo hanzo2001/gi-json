@@ -4,8 +4,6 @@ import {Value} from "./Value";
 import {ElementParser} from "../Utils";
 
 export class StringValue extends Value implements iValue {
-	e: HTMLElement;
-	type: ValueType;
 	value: string;
 	constructor(h: iNodeHash, e: HTMLElement) {
 		super();

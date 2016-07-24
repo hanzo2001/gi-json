@@ -6,7 +6,7 @@ import {valueTypes} from "../GenericTreeFormCommons";
 export class AddItemForm extends GenericFormAction {
 	constructor(state: iTreeState) {
 		super();
-		let arrayValue = <iArrayValue>state.selectedNode;
+		let arrayValue = <iArrayValue>state.selectedNode();
 		this.tid = 'addItemForm';
 		this.contextData = {
 			types: valueTypes,

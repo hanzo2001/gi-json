@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./Value", "../Utils", "../Item"], function (require, exports, Value_1, Utils_1, Item_1) {
+define(["require", "exports", "./ComplexValue", "../Utils", "../Item"], function (require, exports, ComplexValue_1, Utils_1, Item_1) {
     "use strict";
     var ArrayValue = (function (_super) {
         __extends(ArrayValue, _super);
@@ -14,9 +14,6 @@ define(["require", "exports", "./Value", "../Utils", "../Item"], function (requi
             this.f = f;
             this._init(h, e || 'a');
         }
-        ArrayValue.prototype.isComplex = function () {
-            return true;
-        };
         ArrayValue.prototype.getItem = function (index) {
             return this.items[index] || null;
         };
@@ -75,7 +72,7 @@ define(["require", "exports", "./Value", "../Utils", "../Item"], function (requi
         ArrayValue.prototype.removeItem = function (index) {
             var item = this.items[index];
             if (item) {
-                item._remove(true);
+                item.remove(true);
                 this.items.splice(index, 1);
                 this.s--;
                 if (!this.s) {
@@ -86,7 +83,7 @@ define(["require", "exports", "./Value", "../Utils", "../Item"], function (requi
         ArrayValue.prototype.empty = function () {
             var i = this.s;
             while (i--) {
-                this.e.removeChild(this.items[i]._remove(true));
+                this.e.removeChild(this.items[i].remove(true));
             }
             this.s = 0;
             this.items = [];
@@ -101,9 +98,9 @@ define(["require", "exports", "./Value", "../Utils", "../Item"], function (requi
         ArrayValue.prototype._remove = function (unlink) {
             var i = this.s;
             while (i--) {
-                this.items[i]._remove(unlink);
+                this.items[i].remove(unlink);
             }
-            return _super.prototype._remove.call(this, unlink);
+            return _super.prototype.remove.call(this, unlink);
         };
         ArrayValue.prototype.toString = function () {
             var r = '', i = 0;
@@ -125,6 +122,6 @@ define(["require", "exports", "./Value", "../Utils", "../Item"], function (requi
             return null;
         };
         return ArrayValue;
-    }(Value_1.Value));
+    }(ComplexValue_1.ComplexValue));
     exports.ArrayValue = ArrayValue;
 });

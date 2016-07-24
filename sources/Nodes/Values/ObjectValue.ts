@@ -1,25 +1,17 @@
 /// <reference path="../../typings/index.d.ts" />
 
-import {Value} from "./Value";
+import {ComplexValue} from "./ComplexValue";
 import {ElementParser,clearTextNodes,nullO} from "../Utils";
 import {Member} from "../Member";
 
-export class ObjectValue extends Value implements iObjectValue {
-	e: HTMLElement;
-	type: ValueType;
-	value: ValueContent;
+export class ObjectValue extends ComplexValue implements iObjectValue {
 	members: {[name:string]: iMember};
-	s: number;
-	f: iNodeEngine;
-	constructor(h: iNodeHash, e: HTMLElement, f: iNodeEngine) {
+	constructor(h: iNodeHash, e: HTMLElement, f: iNodeFactory) {
 		super();
 		this.members = nullO();
 		this.s = 0;
 		this.f = f;
 		this._init(h,e||'o');
-	}
-	isComplex(): boolean {
-		return true;
 	}
 	getMember(name: string): iMember {
 		return this.members[name] || null;
@@ -47,7 +39,7 @@ export class ObjectValue extends Value implements iObjectValue {
 	removeMember(name: string) {
 		let member: iMember = this.members[name];
 		if (member) {
-			let e: HTMLElement = member._remove(true);
+			let e: HTMLElement = member.remove(true);
 			delete this.members[name];
 			this.s--;
 			if (!this.s) {this._defaultValue(this.e);}
@@ -64,7 +56,7 @@ export class ObjectValue extends Value implements iObjectValue {
 	empty() {
 		let i: string;
 		for (i in this.members) {
-			this.members[i]._remove(true);
+			this.members[i].remove(true);
 			delete this.members[i];
 		}
 		this.s = 0;
@@ -72,12 +64,12 @@ export class ObjectValue extends Value implements iObjectValue {
 	}
 	first(): iValueContainer {
 		let e = <HTMLElement>this.e.firstElementChild;
-		let c = e ? this._h.getNode(e) : null;
+		let c = e ? this._h.get(e) : null;
 		return <iValueContainer>c || null;
 	}
 	last(): iValueContainer {
 		let e = <HTMLElement>this.e.lastElementChild;
-		let c = e ? this._h.getNode(e) : null;
+		let c = e ? this._h.get(e) : null;
 		return <iValueContainer>c || null;
 	}
 	toString() {
@@ -92,10 +84,10 @@ export class ObjectValue extends Value implements iObjectValue {
 	_remove(unlink: boolean) {
 		let i: string;
 		for (i in this.members) {
-			this.members[i]._remove(unlink);
+			this.members[i].remove(unlink);
 			delete this.members[i];
 		}
-		return super._remove(unlink);
+		return super.remove(unlink);
 	}
 	protected _extractValue(objectElement: HTMLElement) {
 		clearTextNodes(objectElement);

@@ -6,7 +6,7 @@ import {valueTypes} from "../GenericTreeFormCommons";
 export class SwitchTypeForm extends GenericFormAction {
 	constructor(state: iTreeState) {
 		super();
-		let value = <iValue>state.selectedNode;
+		let value = <iValue>state.selectedNode();
 		this.tid = 'switchTypeForm';
 		this.contextData = {
 			types: valueTypes,
@@ -18,12 +18,13 @@ export class SwitchTypeForm extends GenericFormAction {
 	}
 	protected updateValue(event: JQueryEventObject) {
 		let value = <iValue>this.target;
-		let container = <iValueContainer>value.getParentContainer();
-		let oldType = value.getDisplayValue();
+		let container = <iValueContainer>value.parent();
+		let oldType = value.type;
 		let newType = this.formRoot.find('select[name=valueType]').val();
 		if (oldType !== newType) {
 			let newValue = container.setType(newType);
-			this.state.select(newValue);
+			this.state.navigator.clear();
+			this.state.navigator.select(newValue);
 		}
 		this._close();
 	}

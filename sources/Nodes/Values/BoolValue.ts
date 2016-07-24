@@ -4,8 +4,6 @@ import {Value} from "./Value";
 import {ElementParser} from "../Utils";
 
 export class BoolValue extends Value implements iValue {
-	e: HTMLElement;
-	type: ValueType;
 	value: boolean;
 	constructor(h: iNodeHash, e: HTMLElement) {
 		super();

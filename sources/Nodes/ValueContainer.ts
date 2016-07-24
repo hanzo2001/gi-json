@@ -2,34 +2,40 @@
 
 import {ProtoBase} from "./ProtoBase";
 
-export class ValueContainer extends ProtoBase implements iValueContainer {
+export abstract class ValueContainer extends ProtoBase implements iValueContainer {
 	v: iValue;
-	f: iNodeEngine;
+	f: iNodeFactory;
 	getParentValue(): iComplexValue {
-		return <any>this.getParent();
+		return <iComplexValue>this.parent();
 	}
 	getType(): ValueType {
 		return this.v.type;
 	}
 	setType(type: ValueType): iValue {
-		this.v._remove(true);
-		this.v = this.f.createValue(type);
+		this.v.remove(true);
+		this.v = this.f.create(this._h,type);
 		this._append(this.v);
 		return this.v;
 	}
 	prev(): iValueContainer {
 		let e = <HTMLElement>this.e.previousElementSibling;
-		let c = e ? this._h.getNode(e) : null;
+		let c = e ? this._h.get(e) : null;
 		return <iValueContainer>c;
 	}
 	next(): iValueContainer {
 		let e = <HTMLElement>this.e.nextElementSibling;
-		let c = e ? this._h.getNode(e) : null;
+		let c = e ? this._h.get(e) : null;
 		return <iValueContainer>c;
 	}
+	first(): iValue {
+		return this.v;
+	}
+	last(): iValue {
+		return this.v;
+	}
 	_remove(unlink: boolean): HTMLElement {
-		let e: HTMLElement = this.v._remove(unlink);
+		let e: HTMLElement = this.v.remove(unlink);
 		this.v = null;
-		return super._remove(unlink);
+		return super.remove(unlink);
 	}
 }

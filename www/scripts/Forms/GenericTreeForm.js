@@ -24,6 +24,7 @@ define(["require", "exports", "jquery", "handlebars"], function (require, export
             if (this._loaded) {
                 this._form.remove();
                 this._loaded = false;
+                this._form = null;
             }
         };
         return GenericTreeForm;
