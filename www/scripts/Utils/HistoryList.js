@@ -59,6 +59,7 @@ define(["require", "exports"], function (require, exports) {
             }
             c.n = e;
             e.p = c;
+            e.n = null;
             this.c = c = e;
             return c.d;
         };

@@ -56,6 +56,7 @@ export class HistoryList<T extends Identifiable> implements iHistoryList<T> {
 		}
 		c.n = e;
 		e.p = c;
+		e.n = null;
 		this.c = c = e;
 		return c.d;
 	}
